@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Floating Browser</title>
+    <style>
+        /* General Styles */
+        html, body, #controls + webview {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        
+        #controls {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px;
+            flex-shrink: 0; 
+        }
+
+        #url-bar {
+            flex: 1;
+            height: 25px;
+            margin-right: 10px;
+            border-radius: 5px;
+            background-color: #242528;
+            color: white; /* Add this line to change the text color */
+
+        }
+       
+#url-bar:focus {
+  outline: none;
+}
+        #brightness-slider {
+            width: 200px; 
+            height: 25px;
+        }
+
+        
+        webview {
+            flex-grow: 1; 
+            width: 100%;
+            overflow: hidden;
+        }
+
+  
+        .disabled-icon {
+    filter: grayscale(100%);
+    opacity: 0.5;
+    pointer-events: none; /* makes it unclickable */
+}
+
+          
+
+        
+    </style>
+</head>
+<body>
+    <div id="controls">
+<img id="back-button" src="images/favicon.png" alt="Go Back" title="Go Back">
+<img id="forward-button" src="images/right.png" alt="Go Forward" title="Go Forward">
+        <input type="text" id="url-bar" placeholder="Enter URL...">
+        <input type="range" min="0.0001" max="1" step="0.0001" value="1" id="brightness-slider" title="Adjust Brightness">
+		<button id="snip-button">Snip</button> <!-- Add this button -->
+
+    </div>
+    <webview src="https://chatgpt.com"></webview>
+	
+    <script src="./preload.js"></script>
+    
+</body>
+
+</html>
