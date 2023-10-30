@@ -131,6 +131,28 @@ ipcRenderer.on('capture-screen-response', (event, response) => {
         const opacity = e.target.value;
         ipcRenderer.send('set-opacity', parseFloat(opacity));
     });
+const backButton = document.getElementById('back-button');
+const forwardButton = document.getElementById('forward-button');
+const webView = document.querySelector('webview');
+
+// Check if navigation is possible
+function updateNavButtons() {
+    if (webView.canGoBack()) {
+        backButton.classList.remove('disabled-button');
+    } else {
+        backButton.classList.add('disabled-button');
+    }
+  
+    if (webView.canGoForward()) {
+        forwardButton.classList.remove('disabled-button');
+    } else {
+        forwardButton.classList.add('disabled-button');
+    }
+}
+
+// Add event listener for when the webview's navigation state changes
+webView.addEventListener('did-navigate', updateNavButtons);
+webView.addEventListener('did-navigate-in-page', updateNavButtons);
 
     document.getElementById('back-button').addEventListener('click', () => {
         if (webview.canGoBack()) {
