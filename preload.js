@@ -162,7 +162,16 @@ function hidePrefixAndRemoveBackslashes(url) {
     return modifiedUrl;
 }
    
+function toggleControls() {
+  const controls = document.getElementById('controls');
+  if (controls.style.display === 'none') {
+    controls.style.display = 'flex';
+  } else {
+    controls.style.display = 'none';
+  }
+}
 
+ipcRenderer.on('toggle-controls', toggleControls);
 
 
 webview.addEventListener('did-navigate', (event) => {
@@ -215,4 +224,7 @@ document.getElementById('url-bar').addEventListener('blur', (event) => {
         brightnessSlider.value = brightnessSlider.max;
         ipcRenderer.send('set-opacity', parseFloat(brightnessSlider.value));
     });
+	
+
+
 });

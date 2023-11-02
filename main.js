@@ -226,7 +226,9 @@ app.on('ready', () => {
 	 globalShortcut.register('Control+Shift+S', () => {
         snippingTool.publicCloseSnipWindow();
     });
-	
+	globalShortcut.register('Control+Shift+H', () => {
+  mainWindow.webContents.send('toggle-controls');
+});
 });
 
 app.on('window-all-closed', function () {
