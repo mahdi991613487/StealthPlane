@@ -229,6 +229,18 @@ app.on('ready', () => {
 	globalShortcut.register('Control+Shift+H', () => {
   mainWindow.webContents.send('toggle-controls');
 });
+globalShortcut.register('Control+Shift+=', () => {
+  const [width, height] = mainWindow.getSize();
+  mainWindow.setSize(width + 100, height + 100);
+});
+
+globalShortcut.register('Control+Shift+-', () => {
+  const [width, height] = mainWindow.getSize();
+  if (width > 100 && height > 100) {
+    mainWindow.setSize(width - 100, height - 100);
+  }
+});
+
 });
 
 app.on('window-all-closed', function () {
