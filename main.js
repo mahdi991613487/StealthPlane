@@ -5,6 +5,9 @@ const { desktopCapturer, nativeImage, screen } = require('electron');
 let mainWindow;
 let tray = null;
 
+
+
+
 function createWindow() {
   mainWindow = new BrowserWindow({
     title: 'Floating Browser',
@@ -69,37 +72,125 @@ function createTrayIcon() {
     mainWindow.show();
   });
 }
-ipcMain.handle('request-screenshot', async () => {
-    const sources = await desktopCapturer.getSources({ types: ['screen'], thumbnailSize: { width: screen.width, height: screen.height } });
-    const screenSource = sources[0];
 
-    if (!screenSource) {
-        throw new Error("Unable to capture screen.");
+// Snip
+
+class SnippingTool {
+    constructor() {
+        this.snipWindow = null;
+        this.fullScreenshot = null;
+
+        this.attachEventListeners();
     }
 
-    return screenSource.thumbnail.toDataURL();
-});
+    publicCloseSnipWindow() {
+        this.closeSnipWindow();
+    }
+	
+    attachEventListeners() {
+        ipcMain.on('start-snipping', this.startSnipping.bind(this));
+        ipcMain.on('capture-portion', this.capturePortion.bind(this));
+        ipcMain.on('capture-screen', this.captureEntireScreen.bind(this));
+    }
+
+    async captureScreen() {
+        const primaryDisplayBounds = screen.getPrimaryDisplay().bounds;
+        const sources = await desktopCapturer.getSources({ 
+            types: ['screen'], 
+            thumbnailSize: primaryDisplayBounds 
+        });
+
+        if (sources && sources[0]?.thumbnail) {
+            return nativeImage.createFromDataURL(sources[0].thumbnail.toDataURL());
+        }
+
+        console.error('Failed to capture the screen');
+        dialog.showErrorBox('Error', 'Failed to capture the screen.');
+        return null;
+    }
+
+    async startSnipping() {
+        if (this.snipWindow) {
+            console.log('Snipping window already open.');
+            return;
+        }
+        
+        this.fullScreenshot = await this.captureScreen();
+        this.openSnipWindow();
+    }
+
+    openSnipWindow() {
+        const primaryDisplayBounds = screen.getPrimaryDisplay().bounds;
+
+        this.snipWindow = new BrowserWindow({
+            ...primaryDisplayBounds,
+            frame: false,
+            transparent: true,
+            alwaysOnTop: true,
+			fullscreen: true,   
+           skipTaskbar: true,
+		   resizable: false,
+            webPreferences: {
+                nodeIntegration: true,
+                contextIsolation: false
+            }
+			
+        });
+
+      this.snipWindow.once('ready-to-show', () => {
+        this.snipWindow.focus();
+        this.snipWindow.maximize();						
+        this.snipWindow.setAlwaysOnTop(true, 'screen-saver', 1);
+        this.snipWindow.setFullScreen(true);
+    });
+
+    this.snipWindow.loadFile('snip.html');
+
+
+    }
+
+    capturePortion(_, coords) {
+    if (!this.fullScreenshot) return;
+    
+    // Validate and log coords
+    if (typeof coords.x !== 'number' || typeof coords.y !== 'number' || typeof coords.width !== 'number' || typeof coords.height !== 'number') {
+        console.error('Invalid coordinates:', coords);
+        return;
+    }
+
+    const snippedImage = this.fullScreenshot.crop(coords);
+    require('electron').clipboard.writeImage(snippedImage);
+    
+    this.closeSnipWindow();
+    this.fullScreenshot = null; 
+}
+
+
+    closeSnipWindow() {
+        if (this.snipWindow) {
+            this.snipWindow.close();
+            this.snipWindow = null;
+        }
+    }
+
+    async captureEntireScreen() {
+        this.fullScreenshot = await this.captureScreen();
+        if (!this.fullScreenshot) {
+            console.error('Error capturing screen');
+        }
+    }
+}
+let snippingTool = new SnippingTool();
+
+
+
+
+// Url nav
 
 ipcMain.on('navigate', (event, url) => {
   event.sender.send('load-webview', url);
 });
-ipcMain.on('capture-screen', async (event) => {
-    try {
-        const { width, height } = screen.getPrimaryDisplay().size;
-        const sources = await desktopCapturer.getSources({ types: ['screen'], thumbnailSize: { width, height } });
-        const screenSource = sources[0];
-        
-        if (!screenSource) {
-            event.reply('capture-screen-response', { error: "Unable to capture screen." });
-            return;
-        }
-        
-        const screenImage = nativeImage.createFromDataURL(screenSource.thumbnail.toDataURL());
-        event.reply('capture-screen-response', { data: screenImage.toDataURL() });
-    } catch (err) {
-        event.reply('capture-screen-response', { error: err.message });
-    }
-});
+
 
 
 ipcMain.on('set-opacity', (event, value) => {
@@ -122,6 +213,20 @@ app.on('ready', () => {
   globalShortcut.register('Control+Shift+X', () => {
         mainWindow.webContents.send('set-max-opacity');
     });
+	globalShortcut.register('Control+Shift+Q', () => {
+        app.quit();
+    });
+	 globalShortcut.register('Control+Shift+W', () => {
+        if (mainWindow.isMinimized()) {
+            mainWindow.restore();
+        } else {
+            mainWindow.focus();
+        }
+    });
+	 globalShortcut.register('Control+Shift+S', () => {
+        snippingTool.publicCloseSnipWindow();
+    });
+	
 });
 
 app.on('window-all-closed', function () {

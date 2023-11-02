@@ -9,108 +9,99 @@ function isValidURL(str) {
         '(\\#[-a-z\\d_]*)?$', 'i');
     return !!pattern.test(str);
 }
-
 window.addEventListener('DOMContentLoaded', () => {
- const webview = document.querySelector('webview');
- 
- 
- //SNIPPING FUNCTION
-	
-	
-const deviceRatio = window.devicePixelRatio || 1;
+const webview = document.querySelector('webview');
 
-const canvas = document.createElement('canvas');
-const ctx = canvas.getContext('2d');
-canvas.width = screen.width * deviceRatio;
-canvas.height = screen.height * deviceRatio;
 
-let bufferCanvas = document.createElement('canvas');
-let bufferCtx = bufferCanvas.getContext('2d');
-bufferCanvas.width = screen.width * deviceRatio;
-bufferCanvas.height = screen.height * deviceRatio;
+// Snipping function
 
-let isDrawing = false;
-let startPoint = {};
 
-canvas.addEventListener('mousedown', (e) => {
-    isDrawing = true;
-    startPoint.x = e.clientX * deviceRatio;
-    startPoint.y = e.clientY * deviceRatio;
-    ctx.drawImage(bufferCanvas, 0, 0, screen.width * deviceRatio, screen.height * deviceRatio);
-});
+class SnippingTool {
+    constructor() {
+        this.startX = null;
+        this.startY = null;
+        this.isDrawing = false;
+        this.rect = document.getElementById('rect');
 
-canvas.addEventListener('mousemove', (e) => {
-    if (!isDrawing) return;
-    const offsetX = e.clientX * deviceRatio;
-    const offsetY = e.clientY * deviceRatio;
-    ctx.drawImage(bufferCanvas, 0, 0, screen.width * deviceRatio, screen.height * deviceRatio);
-    ctx.beginPath();
-    ctx.rect(startPoint.x, startPoint.y, offsetX - startPoint.x, offsetY - startPoint.y);
-    ctx.strokeStyle = 'red';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-});
-
-canvas.addEventListener('mouseup', (e) => {
-    isDrawing = false;
-
-    const offsetX = e.clientX * deviceRatio;
-    const offsetY = e.clientY * deviceRatio;
-    const width = Math.abs(offsetX - startPoint.x);
-    const height = Math.abs(offsetY - startPoint.y);
-    const startX = Math.min(offsetX, startPoint.x);
-    const startY = Math.min(offsetY, startPoint.y);
-
-    if (width === 0 || height === 0) {
-        return;
-    }
-    const snippedImage = ctx.getImageData(startX, startY, width, height);
-    const snippedCanvas = document.createElement('canvas');
-    snippedCanvas.width = width;
-    snippedCanvas.height = height;
-    snippedCanvas.getContext('2d').putImageData(snippedImage, 0, 0);
-
-    const snippedDataURL = snippedCanvas.toDataURL();
-
-    clipboard.writeImage(nativeImage.createFromDataURL(snippedDataURL));
-    document.body.removeChild(canvas);
-});
-document.getElementById('snip-button').addEventListener('click', () => {
-    if (document.body.contains(canvas)) {
-        document.body.removeChild(canvas);
+        this.attachEventListeners();
     }
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    bufferCtx.clearRect(0, 0, bufferCanvas.width, bufferCanvas.height);
+    attachEventListeners() {
+        document.addEventListener('mousedown', this.handleMouseDown.bind(this));
+        document.addEventListener('mousemove', this.handleMouseMove.bind(this));
+        document.addEventListener('mouseup', this.handleMouseUp.bind(this));
 
-    ipcRenderer.send('capture-screen');
-});
-
-ipcRenderer.on('capture-screen-response', (event, response) => {
-    if(response.error) {
-        console.error("Failed to capture screen:", response.error);
-        return;
+        document.getElementById('snip-button').addEventListener('click', this.initiateSnipping.bind(this));
     }
 
-    const img = new Image();
-    img.onload = () => {
-        bufferCtx.drawImage(img, 0, 0, screen.width, screen.height);
-        ctx.drawImage(bufferCanvas, 0, 0, screen.width, screen.height);
+    handleMouseDown(e) {
+        if (!this.isDrawing ) {
+            this.startX = e.clientX;
+            this.startY = e.clientY;
+            this.isDrawing = true;
+			if (this.rect) {  // Check if rect is not null
+            this.rect.style.visibility = 'visible';
+        }
+        }
+    }
 
-        canvas.style.position = 'fixed';
-        canvas.style.top = '0';
-        canvas.style.left = '0';
-        canvas.style.zIndex = '9999';  
+    handleMouseMove(e) {
+    if (this.rect && this.isDrawing && this.startX !== null) {
+        const { width, height, left, top } = this.calculateDimensions(e.clientX, e.clientY);
 
-   
-        document.body.style.margin = '0';
-        document.body.style.overflow = 'hidden';
+        this.rect.style.width = `${width}px`;
+        this.rect.style.height = `${height}px`;
+        this.rect.style.left = `${left}px`;
+        this.rect.style.top = `${top}px`;
+    }
+}
 
-        document.body.appendChild(canvas);
-    };
-    img.src = response.data;
-});
 
+    handleMouseUp(e) {
+    if (this.isDrawing) {
+        const { width, height, left, top } = this.calculateDimensions(e.clientX, e.clientY);
+
+        ipcRenderer.send('capture-portion', {
+            x: left, 
+            y: top,  
+            width,
+            height
+        });
+        this.reset();
+    }
+}
+
+
+    calculateDimensions(currentX, currentY) {
+    const width = Math.abs(currentX - this.startX);
+    const height = Math.abs(currentY - this.startY);
+    const left = Math.min(currentX, this.startX);
+    const top = Math.min(currentY, this.startY);
+
+    return { width, height, left, top };
+}
+
+
+    initiateSnipping() {
+        ipcRenderer.send('start-snipping');
+    }
+
+    reset() {
+        this.startX = null;
+        this.startY = null;
+        this.isDrawing = false;
+		 if (this.rect) {  
+        this.rect.style.visibility = 'hidden';
+    }
+
+    }
+}
+
+
+    new SnippingTool();
+
+
+// End
 
 
 
