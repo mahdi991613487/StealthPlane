@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+<link rel="stylesheet" href="../css/Settings.css">
+	
+</head>
+<body>
+
+<div class="container">
+    <div class="menu">
+        <button class="back-button" onclick="goBack()">Back</button>
+        <div class="menu-item" onclick="showContent('appearance')">Appearance</div>
+        <div class="menu-item" onclick="showContent('performance')">Performance</div>
+        <div class="menu-item" onclick="showContent('privacy')">Privacy and security</div>
+		<div class="menu-item" onclick="showContent('shortcuts')">Shortcuts</div>
+
+    </div>
+    <div class="content" id="appearance">
+        <h2>Appearance</h2>
+        <label>
+           <br> <input type="checkbox" id="toggleTheme">Dark Mode
+        </label>
+        <br>
+        <label>
+            <input type="checkbox" id="toggleFrame"> Disable Frame
+        </label>
+    </div>
+    <div class="content" id="performance">
+        <h2>Performance</h2>
+        <label>
+            <input type="checkbox" id="toggleAnimations"> Disable Animations
+        </label>
+    </div>
+    <div class="content" id="privacy">
+        <h2>Privacy and security</h2>
+    </div>
+</div>
+<div class="content" id="shortcuts">
+        <h2>Shortcuts</h2>
+    </div>
+</div>
+<script src="../js/preload.js"></script>
+<script src="../js/Settings.js"></script>
+
+</body>
+</html>
+

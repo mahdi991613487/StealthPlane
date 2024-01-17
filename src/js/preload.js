@@ -122,6 +122,7 @@ class SnippingTool {
         const opacity = e.target.value;
         ipcRenderer.send('set-opacity', parseFloat(opacity));
     });
+	
 const backButton = document.getElementById('back-button');
 const forwardButton = document.getElementById('forward-button');
 const webView = document.querySelector('webview');
@@ -224,7 +225,9 @@ document.getElementById('url-bar').addEventListener('blur', (event) => {
         brightnessSlider.value = brightnessSlider.max;
         ipcRenderer.send('set-opacity', parseFloat(brightnessSlider.value));
     });
-	
+	document.getElementById('settings-button').addEventListener('click', function() {
+window.location.href = "../html/Settings.html";
+});
 
 
 });

@@ -1,9 +1,11 @@
 const { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut } = require('electron');
 const electronContextMenu = require('electron-context-menu');
 const { desktopCapturer, nativeImage, screen } = require('electron');
+const path = require('path');
 
 let mainWindow;
 let tray = null;
+const imagePath = path.join(__dirname, '..', 'assets', 'img');
 
 
 
@@ -16,7 +18,7 @@ function createWindow() {
     autoHideMenuBar: true,
     backgroundColor: '#16171a',
     show: false,
-    icon: __dirname + '/images/blackman.ico',
+    icon: path.join(imagePath, 'StealthPlane.png'),
     webPreferences: {      
       nodeIntegration: true,
       contextIsolation: false,
@@ -25,7 +27,7 @@ function createWindow() {
     },
   });
 
-  mainWindow.loadFile('index.html');
+mainWindow.loadFile(path.join(__dirname, '..', 'html', 'index.html'));
 
   electronContextMenu({
     window: mainWindow,
@@ -49,18 +51,19 @@ function createWindow() {
   createTrayIcon();
 }
 
+
 function createTrayIcon() {
-  tray = new Tray(__dirname + '/images/blackman.ico');
+  tray = new Tray(path.join(imagePath, 'StealthPlane.png'));
   
   const trayContextMenu = Menu.buildFromTemplate([
     {
       label: 'Open',
-      icon: __dirname + '/images/blackman_small.png',
+      icon: path.join(imagePath, 'StealthPlaneSmall.png'),
       click: () => mainWindow.show()
     },
     {
       label: 'Exit',
-      icon: __dirname + '/images/blackman_small.png',
+      icon: path.join(imagePath, 'StealthPlaneSmall.png'),
       click: () => app.quit()
     }
   ]);
@@ -144,7 +147,8 @@ class SnippingTool {
         this.snipWindow.setFullScreen(true);
     });
 
-    this.snipWindow.loadFile('snip.html');
+    this.snipWindow.loadFile(path.join(__dirname, '..', 'html', 'snip.html'));
+
 
 
     }
@@ -197,6 +201,8 @@ ipcMain.on('set-opacity', (event, value) => {
   mainWindow.setOpacity(value);
 });
 
+
+
 app.on('ready', () => {
   createWindow();
 
@@ -229,6 +235,9 @@ app.on('ready', () => {
 	globalShortcut.register('Control+Shift+H', () => {
   mainWindow.webContents.send('toggle-controls');
 });
+
+
+
 });
 
 app.on('window-all-closed', function () {

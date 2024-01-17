@@ -1,0 +1,90 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Comic Neue', cursive;
+}
+
+body {
+    background-color: #fff;
+    color: #000;
+    font-size: 16px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.menu {
+    flex: 0 0 250px;
+    padding: 20px;
+    background: #4CAF50; /* Green background for the menu */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 3px 0px 10px rgba(0,0,0,0.2);
+}
+
+.menu-item {
+    padding: 10px;
+    margin: 1px 0;
+    background: #8BC34A;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.menu-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 5px 15px rgba(0,0,0,0.3);
+}
+
+.content {
+    flex-grow: 1;
+    padding: 20px;
+    transition: opacity 0.5s ease-in-out;
+    opacity: 0; /* Initially hide the content */
+}
+
+.content.active {
+    opacity: 1; /* Make active content visible */
+}
+
+.back-button {
+    padding: 10px 20px;
+    background-color: #FFC107; /* Yellow background for the button */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-bottom: 20px;
+}
+
+.back-button:hover {
+    background-color: #FFEB3B;
+}
+
+/* Checkbox styles */
+label {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+label input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+
+

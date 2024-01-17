@@ -2,7 +2,7 @@
   "name": "floating_browser",
   "version": "1.0.0",
   "description": "A floating browser built with Electron that stays on top of other windows.",
-  "main": "main.js",
+  "main": "src/js/main.js",
   "scripts": {
     "package": "electron-packager . floating_browser --overwrite --platform=win32 --arch=ia32,x64 --prune=true --out=release-builds",
     "start": "electron .",
@@ -14,7 +14,7 @@
     "floating",
     "always-on-top"
   ],
-  "author": "",
+  "author": "Mehdi Abdulhafiz",
   "license": "ISC",
   "devDependencies": {
     "electron": "^27.0.2",
