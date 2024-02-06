@@ -4,47 +4,95 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Settings</title>
-<link rel="stylesheet" href="../css/Settings.css">
-	
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .shortcut-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .shortcut-table th, .shortcut-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .shortcut-table th {
+            background-color: #e0e0e0;
+        }
+        .edit-btn {
+            cursor: pointer;
+            color: #007bff;
+            text-decoration: underline;
+        }
+        .button-bar {
+            text-align: right;
+        }
+        .button {
+            padding: 10px 20px;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        .save-button {
+            background-color: #28a745;
+            margin-right: 10px;
+        }
+        .back-button {
+            background-color: #dc3545;
+        }
+    </style>
 </head>
 <body>
+    <h2>Customize Shortcuts</h2>
+    <table class="shortcut-table">
+        <tr>
+            <th>Action</th>
+            <th>Shortcut</th>
+            <th>Edit</th>
+        </tr>
+        <!-- Repeat this row for each shortcut -->
+        <tr>
+            <td>Increase Opacity</td>
+            <td id="shortcut-increase-opacity">Control+Shift+Up</td>
+            <td><span class="edit-btn" data-action="increase-opacity">Edit</span></td>
+        </tr>
+        <!-- Add more rows for other shortcuts -->
+    </table>
 
-<div class="container">
-    <div class="menu">
-        <button class="back-button" onclick="goBack()">Back</button>
-        <div class="menu-item" onclick="showContent('appearance')">Appearance</div>
-        <div class="menu-item" onclick="showContent('performance')">Performance</div>
-        <div class="menu-item" onclick="showContent('privacy')">Privacy and security</div>
-		<div class="menu-item" onclick="showContent('shortcuts')">Shortcuts</div>
+    <div class="button-bar">
+        <button class="button save-button">Save</button>
+        <button class="button back-button" onclick="window.history.back();">Go Back</button>
+    </div>
 
-    </div>
-    <div class="content" id="appearance">
-        <h2>Appearance</h2>
-        <label>
-           <br> <input type="checkbox" id="toggleTheme">Dark Mode
-        </label>
-        <br>
-        <label>
-            <input type="checkbox" id="toggleFrame"> Disable Frame
-        </label>
-    </div>
-    <div class="content" id="performance">
-        <h2>Performance</h2>
-        <label>
-            <input type="checkbox" id="toggleAnimations"> Disable Animations
-        </label>
-    </div>
-    <div class="content" id="privacy">
-        <h2>Privacy and security</h2>
-    </div>
-</div>
-<div class="content" id="shortcuts">
-        <h2>Shortcuts</h2>
-    </div>
-</div>
-<script src="../js/preload.js"></script>
-<script src="../js/Settings.js"></script>
+    <script>
+        document.querySelectorAll('.edit-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const action = this.dataset.action;
+                const newShortcut = prompt('Enter new shortcut using Shift and Control + Letter');
+                if (newShortcut) {
+                    // Basic validation (improve as needed)
+                    if (/Control\+Shift\+[A-Za-z]/.test(newShortcut)) {
+                        document.getElementById(`shortcut-${action}`).textContent = newShortcut;
+                        // Send newShortcut to main process to update and save
+                        // Example: ipcRenderer.send('update-shortcut', { action, newShortcut });
+                    } else {
+                        alert('Invalid shortcut. Please use the format "Control+Shift+Letter".');
+                    }
+                }
+            });
+        });
 
+        document.querySelector('.save-button').addEventListener('click', function() {
+            // Logic to save the shortcuts
+            // Example: ipcRenderer.send('save-shortcuts');
+            window.history.back(); // Go back after saving
+        });
+    </script>
 </body>
 </html>
-
