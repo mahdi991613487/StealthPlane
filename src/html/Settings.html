@@ -55,14 +55,12 @@
             <th>Action</th>
             <th>Shortcut</th>
             <th>Edit</th>
-        </tr>
-        <!-- Repeat this row for each shortcut -->
+        </tr>     
         <tr>
             <td>Increase Opacity</td>
             <td id="shortcut-increase-opacity">Control+Shift+Up</td>
             <td><span class="edit-btn" data-action="increase-opacity">Edit</span></td>
         </tr>
-        <!-- Add more rows for other shortcuts -->
     </table>
 
     <div class="button-bar">
@@ -76,11 +74,10 @@
                 const action = this.dataset.action;
                 const newShortcut = prompt('Enter new shortcut using Shift and Control + Letter');
                 if (newShortcut) {
-                    // Basic validation (improve as needed)
+                  
                     if (/Control\+Shift\+[A-Za-z]/.test(newShortcut)) {
                         document.getElementById(`shortcut-${action}`).textContent = newShortcut;
-                        // Send newShortcut to main process to update and save
-                        // Example: ipcRenderer.send('update-shortcut', { action, newShortcut });
+                       
                     } else {
                         alert('Invalid shortcut. Please use the format "Control+Shift+Letter".');
                     }
@@ -89,9 +86,7 @@
         });
 
         document.querySelector('.save-button').addEventListener('click', function() {
-            // Logic to save the shortcuts
-            // Example: ipcRenderer.send('save-shortcuts');
-            window.history.back(); // Go back after saving
+            window.history.back(); 
         });
     </script>
 </body>
