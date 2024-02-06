@@ -239,45 +239,29 @@ app.on('ready', () => {
 globalShortcut.register('Control+Shift+=', () => {
   const [width, height] = mainWindow.getSize();
   const [x, y] = mainWindow.getPosition();
-  // Get the primary display's resolution
-  const { width: screenWidth, height: screenHeight } = screen.getPrimaryDisplay().workAreaSize;
-  // Calculate new size
   const newWidth = width + 100;
   const newHeight = height + 100;
-  if (newWidth >= screenWidth || newHeight >= screenHeight) {
-    // If new size exceeds screen dimensions, toggle full screen
-    mainWindow.setFullScreen(true);
-  } else {
-    // Calculate new position to keep the window centered
-    const newX = x - 50; // Move window to the left
-    const newY = y - 50; // Move window up
-    // Set the new size and position
-    mainWindow.setSize(newWidth, newHeight);
-    mainWindow.setPosition(newX, newY);
-  }
+  const newX = x - 50; 
+  const newY = y - 50; 
+ 
+  mainWindow.setSize(newWidth, newHeight);
+  mainWindow.setPosition(newX, newY);
 });
 
 globalShortcut.register('Control+Shift+-', () => {
-  // If window is in full screen, exit full screen before resizing
-  if (mainWindow.isFullScreen()) {
-    mainWindow.setFullScreen(false);
-    return; // Exit the function to avoid resizing immediately after exiting full screen
-  }
-
   const [width, height] = mainWindow.getSize();
   const [x, y] = mainWindow.getPosition();
   if (width > 100 && height > 100) {
-    // Calculate new size
     const newWidth = width - 100;
     const newHeight = height - 100;
-    // Calculate new position to keep the window centered
-    const newX = x + 50; // Move window to the right
-    const newY = y + 50; // Move window down
-    // Set the new size and position
+  
+    const newX = x + 50; 
+    const newY = y + 50; 
     mainWindow.setSize(newWidth, newHeight);
     mainWindow.setPosition(newX, newY);
   }
 });
+
 });
 
 app.on('window-all-closed', function () {

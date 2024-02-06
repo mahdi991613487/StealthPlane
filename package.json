@@ -25,6 +25,7 @@
     "electron-capture": "^1.1.3",
     "electron-context-menu": "^3.6.1",
     "electron-pdf-window": "^1.0.0",
+    "electron-store": "^8.1.0",
     "electron-updater": "^6.1.4"
   }
 }
