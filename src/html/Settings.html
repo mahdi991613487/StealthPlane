@@ -49,117 +49,136 @@
   </style>
 </head>
 <body>
-    <h2>Customize Shortcuts</h2>
-    <table class="shortcut-table">
-      <tr>
-        <th>Action</th>
-        <th>Shortcut</th>
-        <th>Edit</th>
-      </tr>
-      <tr>
-        <td>Increase Opacity</td>
-        <td id="shortcut-increase-opacity">Control+Shift+Up</td>
-        <td><span class="edit-btn" data-action="increase-opacity">Edit</span></td>
-      </tr>
-      <tr>
-        <td>Decrease Opacity</td>
-        <td id="shortcut-decrease-opacity">Control+Shift+Down</td>
-        <td><span class="edit-btn" data-action="decrease-opacity">Edit</span></td>
-      </tr>
-      <tr>
-        <td>Set Minimum Opacity</td>
-        <td id="shortcut-set-min-opacity">Control+Shift+Z</td>
-        <td><span class="edit-btn" data-action="set-min-opacity">Edit</span></td>
-      </tr>
-      <tr>
-        <td>Set Maximum Opacity</td>
-        <td id="shortcut-set-max-opacity">Control+Shift+X</td>
-        <td><span class="edit-btn" data-action="set-max-opacity">Edit</span></td>
-      </tr>
-      <tr>
-        <td>Quit App</td>
-        <td id="shortcut-quit-app">Control+Shift+Q</td>
-        <td><span class="edit-btn" data-action="quit-app">Edit</span></td>
-      </tr>
-      <tr>
-        <td>Toggle Window</td>
-        <td id="shortcut-toggle-window">Control+Shift+W</td>
-        <td><span class="edit-btn" data-action="toggle-window">Edit</span></td>
-      </tr>
-      <tr>
-        <td>Close Snipping</td>
-        <td id="shortcut-close-snipping">Control+Shift+S</td>
-        <td><span class="edit-btn" data-action="close-snipping">Edit</span></td>
-      </tr>
-      <tr>
-        <td>Toggle Controls</td>
-        <td id="shortcut-toggle-controls">Control+Shift+H</td>
-        <td><span class="edit-btn" data-action="toggle-controls">Edit</span></td>
-      </tr>
-      <tr>
-        <td>Increase Window Size</td>
-        <td id="shortcut-increase-window-size">Control+Shift+=</td>
-        <td><span class="edit-btn" data-action="increase-window-size">Edit</span></td>
-      </tr>
-      <tr>
-        <td>Decrease Window Size</td>
-        <td id="shortcut-decrease-window-size">Control+Shift+-</td>
-        <td><span class="edit-btn" data-action="decrease-window-size">Edit</span></td>
-      </tr>
-    </table>
-  
-    <div class="button-bar">
-      <button class="button save-button">Save</button>
-      <button class="button back-button" onclick="window.history.back();">Go Back</button>
-    </div>
-  
-    <dialog id="shortcut-dialog">
-      <form method="dialog">
-        <label for="shortcut-input">Enter new shortcut letter:</label>
-        <input type="text" id="shortcut-input" required pattern="^[A-Za-z]$" maxlength="1">
-        <small id="shortcut-help">Example: A</small>
-        <button value="cancel">Cancel</button>
-        <button id="confirm-btn" value="default">Confirm</button>
-      </form>
-    </dialog>
-  
-    <script>
-      const { ipcRenderer } = require('electron');
-      const shortcutDialog = document.getElementById('shortcut-dialog');
-      const shortcutInput = document.getElementById('shortcut-input');
-      const confirmBtn = document.getElementById('confirm-btn');
-  
-      function openShortcutDialog(action) {
-        shortcutInput.value = '';
-        return new Promise((resolve) => {
-          confirmBtn.addEventListener('click', () => {
-            const letter = shortcutInput.value.trim();
-            if (letter && shortcutInput.validity.valid) {
-              const newShortcut = `Control+Shift+${letter}`;
-              resolve(newShortcut);
-            } else {
-              alert('Please enter a single letter.');
-            }
-            shortcutDialog.close();
-          }, { once: true });
-          shortcutDialog.showModal();
-        });
+  <h2>Customize Shortcuts</h2>
+  <table class="shortcut-table">
+    <tr>
+      <th>Action</th>
+      <th>Shortcut</th>
+      <th>Edit</th>
+    </tr>
+    <tr>
+      <td>Increase Opacity</td>
+      <td id="shortcut-increase-opacity">Control+Shift+Up</td>
+      <td><span class="edit-btn" data-action="increase-opacity">Edit</span></td>
+    </tr>
+    <tr>
+      <td>Decrease Opacity</td>
+      <td id="shortcut-decrease-opacity">Control+Shift+Down</td>
+      <td><span class="edit-btn" data-action="decrease-opacity">Edit</span></td>
+    </tr>
+    <tr>
+      <td>Set Minimum Opacity</td>
+      <td id="shortcut-set-min-opacity">Control+Shift+Z</td>
+      <td><span class="edit-btn" data-action="set-min-opacity">Edit</span></td>
+    </tr>
+    <tr>
+      <td>Set Maximum Opacity</td>
+      <td id="shortcut-set-max-opacity">Control+Shift+X</td>
+      <td><span class="edit-btn" data-action="set-max-opacity">Edit</span></td>
+    </tr>
+    <tr>
+      <td>Quit App</td>
+      <td id="shortcut-quit-app">Control+Shift+Q</td>
+      <td><span class="edit-btn" data-action="quit-app">Edit</span></td>
+    </tr>
+    <tr>
+      <td>Toggle Window</td>
+      <td id="shortcut-toggle-window">Control+Shift+W</td>
+      <td><span class="edit-btn" data-action="toggle-window">Edit</span></td>
+    </tr>
+    <tr>
+      <td>Close Snipping</td>
+      <td id="shortcut-close-snipping">Control+Shift+S</td>
+      <td><span class="edit-btn" data-action="close-snipping">Edit</span></td>
+    </tr>
+    <tr>
+      <td>Toggle Controls</td>
+      <td id="shortcut-toggle-controls">Control+Shift+H</td>
+      <td><span class="edit-btn" data-action="toggle-controls">Edit</span></td>
+    </tr>
+    <tr>
+      <td>Increase Window Size</td>
+      <td id="shortcut-increase-window-size">Control+Shift+=</td>
+      <td><span class="edit-btn" data-action="increase-window-size">Edit</span></td>
+    </tr>
+    <tr>
+      <td>Decrease Window Size</td>
+      <td id="shortcut-decrease-window-size">Control+Shift+-</td>
+      <td><span class="edit-btn" data-action="decrease-window-size">Edit</span></td>
+    </tr>
+  </table>
+
+  <div class="button-bar">
+    <button class="button save-button">Save</button>
+    <button class="button back-button" onclick="window.history.back();">Go Back</button>
+  </div>
+
+  <dialog id="shortcut-dialog">
+    <form method="dialog">
+      <label for="shortcut-input">Enter new shortcut letter:</label>
+      <input type="text" id="shortcut-input" required pattern="^[A-Za-z]$" maxlength="1">
+      <small id="shortcut-help">Example: A</small>
+      <button value="cancel">Cancel</button>
+      <button id="confirm-btn" value="default">Confirm</button>
+    </form>
+  </dialog>
+
+  <script>
+    const { ipcRenderer } = require('electron');
+    const shortcutDialog = document.getElementById('shortcut-dialog');
+    const shortcutInput = document.getElementById('shortcut-input');
+    const confirmBtn = document.getElementById('confirm-btn');
+    const shortcuts = ipcRenderer.sendSync('get-shortcuts');
+
+    Object.entries(shortcuts).forEach(([action, shortcut]) => {
+  const shortcutElement = document.getElementById(`shortcut-${action}`);
+  if (shortcutElement) {
+    shortcutElement.textContent = shortcut;
+  }
+});
+    function openShortcutDialog(action) {
+  shortcutInput.value = '';
+  shortcutInput.setCustomValidity('');
+  confirmBtn.disabled = false;
+  return new Promise((resolve) => {
+    const handleConfirm = () => {
+      const letter = shortcutInput.value.trim();
+      if (letter && shortcutInput.validity.valid) {
+        const newShortcut = `Control+Shift+${letter}`;
+        resolve(newShortcut);
+      } else {
+        shortcutInput.setCustomValidity('Please enter a single letter.');
+        shortcutInput.reportValidity();
       }
-  
-      document.querySelectorAll('.edit-btn').forEach(button => {
-        button.addEventListener('click', async function() {
-          const action = this.dataset.action;
-          const newShortcut = await openShortcutDialog(action);
-          if (newShortcut) {
-            document.getElementById(`shortcut-${action}`).textContent = newShortcut;
-            ipcRenderer.send('update-shortcut', { action, newShortcut });
-          }
-        });
+    };
+    confirmBtn.addEventListener('click', handleConfirm);
+    shortcutDialog.addEventListener('close', () => {
+      confirmBtn.removeEventListener('click', handleConfirm);
+      resolve(null);
+    }, { once: true });
+    shortcutDialog.showModal();
+  });
+}
+
+    document.querySelectorAll('.edit-btn').forEach(button => {
+      button.addEventListener('click', async function() {
+        const action = this.dataset.action;
+        const newShortcut = await openShortcutDialog(action);
+        if (newShortcut) {
+          document.getElementById(`shortcut-${action}`).textContent = newShortcut;
+        }
       });
-  
-      document.querySelector('.save-button').addEventListener('click', function() {
-        window.history.back();
-      });
-    </script>
-  </body>
-  </html>
+    });
+
+    document.querySelector('.save-button').addEventListener('click', function() {
+      const updatedShortcuts = {};
+document.querySelectorAll('.shortcut-table td[id^="shortcut-"]').forEach((td) => {
+const action = td.id.replace('shortcut-', '');
+updatedShortcuts[action] = td.textContent;
+});
+ipcRenderer.send('update-shortcuts', updatedShortcuts);
+window.history.back();
+}); </script>
+
+</body> 
+</html>
