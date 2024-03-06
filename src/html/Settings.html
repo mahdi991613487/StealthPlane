@@ -1,98 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Settings</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
-        .shortcut-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        .shortcut-table th, .shortcut-table td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        .shortcut-table th {
-            background-color: #e0e0e0;
-        }
-        .edit-btn {
-            cursor: pointer;
-            color: #007bff;
-            text-decoration: underline;
-        }
-        .button-bar {
-            text-align: right;
-        }
-        .button {
-            padding: 10px 20px;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-        }
-        .save-button {
-            background-color: #28a745;
-            margin-right: 10px;
-        }
-        .back-button {
-            background-color: #dc3545;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+    .shortcut-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    .shortcut-table th, .shortcut-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    .shortcut-table th {
+      background-color: #e0e0e0;
+    }
+    .edit-btn {
+      cursor: pointer;
+      color: #007bff;
+      text-decoration: underline;
+    }
+    .button-bar {
+      text-align: right;
+    }
+    .button {
+      padding: 10px 20px;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+    .save-button {
+      background-color: #28a745;
+      margin-right: 10px;
+    }
+    .back-button {
+      background-color: #dc3545;
+    }
+  </style>
 </head>
 <body>
     <h2>Customize Shortcuts</h2>
     <table class="shortcut-table">
-        <tr>
-            <th>Action</th>
-            <th>Shortcut</th>
-            <th>Edit</th>
-        </tr>
-        <!-- Repeat this row for each shortcut -->
-        <tr>
-            <td>Increase Opacity</td>
-            <td id="shortcut-increase-opacity">Control+Shift+Up</td>
-            <td><span class="edit-btn" data-action="increase-opacity">Edit</span></td>
-        </tr>
-        <!-- Add more rows for other shortcuts -->
+      <tr>
+        <th>Action</th>
+        <th>Shortcut</th>
+        <th>Edit</th>
+      </tr>
+      <tr>
+        <td>Increase Opacity</td>
+        <td id="shortcut-increase-opacity">Control+Shift+Up</td>
+        <td><span class="edit-btn" data-action="increase-opacity">Edit</span></td>
+      </tr>
+      <tr>
+        <td>Decrease Opacity</td>
+        <td id="shortcut-decrease-opacity">Control+Shift+Down</td>
+        <td><span class="edit-btn" data-action="decrease-opacity">Edit</span></td>
+      </tr>
+      <tr>
+        <td>Set Minimum Opacity</td>
+        <td id="shortcut-set-min-opacity">Control+Shift+Z</td>
+        <td><span class="edit-btn" data-action="set-min-opacity">Edit</span></td>
+      </tr>
+      <tr>
+        <td>Set Maximum Opacity</td>
+        <td id="shortcut-set-max-opacity">Control+Shift+X</td>
+        <td><span class="edit-btn" data-action="set-max-opacity">Edit</span></td>
+      </tr>
+      <tr>
+        <td>Quit App</td>
+        <td id="shortcut-quit-app">Control+Shift+Q</td>
+        <td><span class="edit-btn" data-action="quit-app">Edit</span></td>
+      </tr>
+      <tr>
+        <td>Toggle Window</td>
+        <td id="shortcut-toggle-window">Control+Shift+W</td>
+        <td><span class="edit-btn" data-action="toggle-window">Edit</span></td>
+      </tr>
+      <tr>
+        <td>Close Snipping</td>
+        <td id="shortcut-close-snipping">Control+Shift+S</td>
+        <td><span class="edit-btn" data-action="close-snipping">Edit</span></td>
+      </tr>
+      <tr>
+        <td>Toggle Controls</td>
+        <td id="shortcut-toggle-controls">Control+Shift+H</td>
+        <td><span class="edit-btn" data-action="toggle-controls">Edit</span></td>
+      </tr>
+      <tr>
+        <td>Increase Window Size</td>
+        <td id="shortcut-increase-window-size">Control+Shift+=</td>
+        <td><span class="edit-btn" data-action="increase-window-size">Edit</span></td>
+      </tr>
+      <tr>
+        <td>Decrease Window Size</td>
+        <td id="shortcut-decrease-window-size">Control+Shift+-</td>
+        <td><span class="edit-btn" data-action="decrease-window-size">Edit</span></td>
+      </tr>
     </table>
-
+  
     <div class="button-bar">
-        <button class="button save-button">Save</button>
-        <button class="button back-button" onclick="window.history.back();">Go Back</button>
+      <button class="button save-button">Save</button>
+      <button class="button back-button" onclick="window.history.back();">Go Back</button>
     </div>
-
+  
+    <dialog id="shortcut-dialog">
+      <form method="dialog">
+        <label for="shortcut-input">Enter new shortcut letter:</label>
+        <input type="text" id="shortcut-input" required pattern="^[A-Za-z]$" maxlength="1">
+        <small id="shortcut-help">Example: A</small>
+        <button value="cancel">Cancel</button>
+        <button id="confirm-btn" value="default">Confirm</button>
+      </form>
+    </dialog>
+  
     <script>
-        document.querySelectorAll('.edit-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const action = this.dataset.action;
-                const newShortcut = prompt('Enter new shortcut using Shift and Control + Letter');
-                if (newShortcut) {
-                    // Basic validation (improve as needed)
-                    if (/Control\+Shift\+[A-Za-z]/.test(newShortcut)) {
-                        document.getElementById(`shortcut-${action}`).textContent = newShortcut;
-                        // Send newShortcut to main process to update and save
-                        // Example: ipcRenderer.send('update-shortcut', { action, newShortcut });
-                    } else {
-                        alert('Invalid shortcut. Please use the format "Control+Shift+Letter".');
-                    }
-                }
-            });
+      const { ipcRenderer } = require('electron');
+      const shortcutDialog = document.getElementById('shortcut-dialog');
+      const shortcutInput = document.getElementById('shortcut-input');
+      const confirmBtn = document.getElementById('confirm-btn');
+  
+      function openShortcutDialog(action) {
+        shortcutInput.value = '';
+        return new Promise((resolve) => {
+          confirmBtn.addEventListener('click', () => {
+            const letter = shortcutInput.value.trim();
+            if (letter && shortcutInput.validity.valid) {
+              const newShortcut = `Control+Shift+${letter}`;
+              resolve(newShortcut);
+            } else {
+              alert('Please enter a single letter.');
+            }
+            shortcutDialog.close();
+          }, { once: true });
+          shortcutDialog.showModal();
         });
-
-        document.querySelector('.save-button').addEventListener('click', function() {
-            // Logic to save the shortcuts
-            // Example: ipcRenderer.send('save-shortcuts');
-            window.history.back(); // Go back after saving
+      }
+  
+      document.querySelectorAll('.edit-btn').forEach(button => {
+        button.addEventListener('click', async function() {
+          const action = this.dataset.action;
+          const newShortcut = await openShortcutDialog(action);
+          if (newShortcut) {
+            document.getElementById(`shortcut-${action}`).textContent = newShortcut;
+            ipcRenderer.send('update-shortcut', { action, newShortcut });
+          }
         });
+      });
+  
+      document.querySelector('.save-button').addEventListener('click', function() {
+        window.history.back();
+      });
     </script>
-</body>
-</html>
+  </body>
+  </html>
