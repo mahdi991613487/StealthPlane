@@ -23,17 +23,35 @@ body {
 
 }
 
-#url-bar {
+#url-bar-container {
     flex: 1;
-    height: 25px;
+    position: relative; 
     margin-right: 10px;
     margin-left: 10px;
+    display: flex; 
+    align-items: center; 
+}
+
+#url-bar {
+    width: calc(100% - 30px);
+    height: 25px;
     border-radius: 12px;
     background-color: #242528;
     color: white;
+    padding-right: 40px; 
     padding-left: 10px;
     border: none;
 }
+
+#zoom-icon {
+    position: absolute;
+    right: 5px;
+    cursor: pointer;
+    width: 20px; 
+    height: 20px; 
+}
+
+
 
 #url-bar:focus {
     outline: none;
@@ -135,4 +153,6 @@ webview {
     animation-play-state: running;  
 }
 
-
+.gray {
+    color: gray;
+  }

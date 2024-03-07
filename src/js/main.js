@@ -244,6 +244,10 @@ ipcMain.on('update-shortcuts', (event, updatedShortcuts) => {
       mainWindow.webContents.send(action);
     });
   });
+
+
+
+  
 });
 
 app.on('ready', () => {

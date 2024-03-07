@@ -31,6 +31,7 @@ class SnippingTool {
  }
 
  handleMouseDown(e) {
+  
    if (!this.isDrawing ) {
      this.startX = e.clientX;
      this.startY = e.clientY;
@@ -42,9 +43,10 @@ class SnippingTool {
  }
 
  handleMouseMove(e) {
+  
  if (this.rect && this.isDrawing && this.startX !== null) {
    const { width, height, left, top } = this.calculateDimensions(e.clientX, e.clientY);
-
+   
    this.rect.style.width = `${width}px`;
    this.rect.style.height = `${height}px`;
    this.rect.style.left = `${left}px`;
@@ -53,9 +55,10 @@ class SnippingTool {
 }
 
  handleMouseUp(e) {
+  
  if (this.isDrawing) {
    const { width, height, left, top } = this.calculateDimensions(e.clientX, e.clientY);
-
+   
    ipcRenderer.send('capture-portion', {
      x: left, 
      y: top,  
@@ -76,7 +79,10 @@ class SnippingTool {
 }
 
  initiateSnipping() {
+  console.log('Snipping button clicked');
+
    ipcRenderer.send('start-snipping');
+   
  }
 
  reset() {
@@ -89,8 +95,8 @@ class SnippingTool {
 
  }
 }
+new SnippingTool();
 
- new SnippingTool();
 
 document.getElementById('url-bar').addEventListener('keydown', (e) => {
    if (e.key === 'Enter') {
@@ -140,6 +146,7 @@ document.getElementById('forward-button').addEventListener('click', () => {
    webview.goForward();
  }
 });
+
 
 function hidePrefixAndRemoveBackslashes(url) {
  let modifiedUrl = url.replace(/^https:\/\/(www\.)?/, '');
@@ -208,7 +215,26 @@ ipcRenderer.on('set-max-opacity', () => {
   document.getElementById('settings-button').addEventListener('click', function() {
 window.location.href = "../html/Settings.html";
 });
+const zoomIcon = document.getElementById('zoom-icon');
 
+webview.addEventListener('zoom-changed', (event) => {
+  const zoomFactor = event.newZoomFactor;
+  updateZoomIcon(zoomFactor);
+});
+
+function updateZoomIcon(zoomFactor) {
+  zoomIcon.style.display = zoomFactor !== 1 ? 'inline' : 'none';
+}
+
+zoomIcon.addEventListener('click', () => {
+  webview.setZoomFactor(1);
+});
+
+webview.addEventListener('resize', () => {
+  webview.getZoomFactor().then((zoomFactor) => {
+    updateZoomIcon(zoomFactor);
+  });
+});
 
 
 });
