@@ -1,4 +1,29 @@
 const { ipcRenderer } = require('electron');
+const tabItems = document.querySelectorAll('.tab-item');
+const tabContents = document.querySelectorAll('.tab-content');
+const disableFrameCheckbox = document.getElementById('disable-frame');
+
+disableFrameCheckbox.addEventListener('change', function() {
+  const isFrameDisabled = this.checked;
+  ipcRenderer.send('set-frame-disabled', isFrameDisabled);
+});
+
+ipcRenderer.send('get-frame-disabled');
+
+ipcRenderer.on('frame-disabled', (event, isFrameDisabled) => {
+  disableFrameCheckbox.checked = isFrameDisabled;
+});
+tabItems.forEach(item => {
+    item.addEventListener('click', function() {
+        const tabId = this.getAttribute('data-tab');
+        
+        tabItems.forEach(item => item.classList.remove('active'));
+        tabContents.forEach(content => content.classList.remove('active'));
+
+        this.classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+    });
+});
 let shortcuts = ipcRenderer.sendSync('get-shortcuts');
 let tempShortcuts = { ...shortcuts };
 
@@ -93,3 +118,4 @@ document.querySelector('.save-button').addEventListener('click', function() {
   tempShortcuts = { ...updatedShortcuts };
   window.history.back();
 });
+

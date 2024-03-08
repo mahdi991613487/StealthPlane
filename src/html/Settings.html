@@ -81,6 +81,23 @@
             </div>
             <div id="appearance" class="tab-content">
                 <h2>Appearance Settings</h2>
+                <div class="appearance-settings">
+                    <div class="setting">
+                        <label for="disable-frame">Disable Frame</label>
+                        <input type="checkbox" id="disable-frame">
+                    </div>
+                    <div class="setting">
+                        <label for="color-mode">Color Mode</label>
+                        <select id="color-mode">
+                            <option value="light">Light Mode</option>
+                            <option value="dark">Dark Mode</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="button-bar">
+                    <button class="button save-button">Save</button>
+                    <button class="button back-button" onclick="window.history.back();">Go Back</button>
+                </div>
             </div>
         </div>
     </div>
@@ -92,5 +109,6 @@
     </div>
 
     <script src="../js/settings.js"></script>
+    
 </body>
 </html>

@@ -22,6 +22,8 @@ const shortcuts = {
   'decrease-window-size': 'Control+Shift+-'
 };
 
+let isFrameDisabled = false;
+
 function loadShortcuts() {
   try {
     if (fs.existsSync(shortcutsFilePath)) {
@@ -45,12 +47,13 @@ function saveShortcuts(shortcuts) {
 function createWindow() {
   mainWindow = new BrowserWindow({
     title: 'Floating Browser',
-    width: 700,
-    height: 600,
+    width: 750,
+    height: 650,
     autoHideMenuBar: true,
     backgroundColor: '#16171a',
     show: false,
     icon: path.join(imagePath, 'StealthPlane.png'),
+    frame: !isFrameDisabled,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -218,37 +221,29 @@ ipcMain.on('set-opacity', (event, value) => {
   mainWindow.setOpacity(value);
 });
 
-// Shortcuts 
-
 ipcMain.on('get-shortcuts', (event) => {
   event.returnValue = loadShortcuts();
 });
 
 ipcMain.on('update-shortcuts', (event, updatedShortcuts) => {
-  // Attempt to register the updated shortcuts in a safe context first
   try {
-    // Unregister all existing shortcuts to prevent conflicts
     Object.values(shortcuts).forEach((shortcut) => {
       globalShortcut.unregister(shortcut);
     });
 
-    // Temporarily register updated shortcuts to test for errors
     Object.entries(updatedShortcuts).forEach(([action, shortcut]) => {
       const registrationSuccess = globalShortcut.register(shortcut, () => {
         console.log(`${action} shortcut registered successfully.`);
       });
 
       if (!registrationSuccess) {
-        // If registration fails, throw an error
         throw new Error(`Failed to register shortcut for ${action}`);
       }
     });
 
-    // If all shortcuts were registered successfully, apply the updates
     Object.assign(shortcuts, updatedShortcuts);
     saveShortcuts(shortcuts);
 
-    // Unregister the test shortcuts and register them officially
     Object.values(shortcuts).forEach((shortcut) => {
       globalShortcut.unregister(shortcut);
     });
@@ -258,14 +253,10 @@ ipcMain.on('update-shortcuts', (event, updatedShortcuts) => {
       });
     });
 
-    // If everything went well, send a success message to the renderer process
     event.sender.send('update-shortcuts-success');
   } catch (error) {
-    // In case of an error, do not save anything and re-register old shortcuts
     console.error(`Error updating shortcuts: ${error.message}`);
     event.sender.send('update-shortcuts-error', error.message);
-
-    // Re-register original shortcuts to ensure system remains in a consistent state
     Object.entries(shortcuts).forEach(([action, shortcut]) => {
       globalShortcut.register(shortcut, () => {
         mainWindow.webContents.send(action);
@@ -274,13 +265,66 @@ ipcMain.on('update-shortcuts', (event, updatedShortcuts) => {
   }
 });
 
+ipcMain.on('set-frame-disabled', (event, disabled) => {
+  isFrameDisabled = disabled;
+  saveSettings();
 
+  const wasVisible = mainWindow.isVisible();
+  const newWindow = new BrowserWindow({
+    title: 'Floating Browser',
+    width: mainWindow.getSize()[0],
+    height: mainWindow.getSize()[1],
+    autoHideMenuBar: true,
+    backgroundColor: '#16171a',
+    show: false,
+    icon: path.join(imagePath, 'StealthPlane.png'),
+    frame: !isFrameDisabled,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
+      webviewTag: true
+    },
+  });
 
+  newWindow.loadURL(mainWindow.webContents.getURL());
 
-  
+  newWindow.once('ready-to-show', () => {
+    mainWindow.destroy();
+    mainWindow = newWindow;
 
+    if (wasVisible) {
+      mainWindow.show();
+    }
+  });
+});
+
+ipcMain.on('get-frame-disabled', (event) => {
+  event.reply('frame-disabled', isFrameDisabled);
+});
+
+function saveSettings() {
+  const settings = {
+    isFrameDisabled: isFrameDisabled,
+  };
+  fs.writeFileSync(path.join(userDataPath, 'settings.json'), JSON.stringify(settings));
+}
+
+function loadSettings() {
+  try {
+    const settingsPath = path.join(userDataPath, 'settings.json');
+    if (fs.existsSync(settingsPath)) {
+      const settingsData = fs.readFileSync(settingsPath, 'utf8');
+      const settings = JSON.parse(settingsData);
+      isFrameDisabled = settings.isFrameDisabled || false;
+    }
+  } catch (error) {
+    console.error('Error loading settings:', error);
+  }
+}
 
 app.on('ready', () => {
+  loadSettings();
   const loadedShortcuts = loadShortcuts();
   Object.assign(shortcuts, loadedShortcuts);
   createWindow();
