@@ -7,70 +7,82 @@
     <link rel="stylesheet" href="../css/settings.css">
 </head>
 <body>
-
-    <h2>Customize Shortcuts</h2>
-    
-    <table class="shortcut-table">
-        <tr>
-            <th>Action</th>
-            <th>Shortcut</th>
-            <th>Edit</th>
-        </tr>
-        <tr>
-            <td>Increase Opacity</td>
-            <td id="shortcut-increase-opacity"></td>
-            <td><span class="edit-btn" data-action="increase-opacity">Edit</span></td>
-        </tr>
-        <tr>
-            <td>Decrease Opacity</td>
-            <td id="shortcut-decrease-opacity"></td>
-            <td><span class="edit-btn" data-action="decrease-opacity">Edit</span></td>
-        </tr>
-        <tr>
-            <td>Set Minimum Opacity</td>
-            <td id="shortcut-set-min-opacity"></td>
-            <td><span class="edit-btn" data-action="set-min-opacity">Edit</span></td>
-        </tr>
-        <tr>
-            <td>Set Maximum Opacity</td>
-            <td id="shortcut-set-max-opacity"></td>
-            <td><span class="edit-btn" data-action="set-max-opacity">Edit</span></td>
-        </tr>
-        <tr>
-            <td>Quit App</td>
-            <td id="shortcut-quit-app"></td>
-            <td><span class="edit-btn" data-action="quit-app">Edit</span></td>
-        </tr>
-        <tr>
-            <td>Toggle Window</td>
-            <td id="shortcut-toggle-window"></td>
-            <td><span class="edit-btn" data-action="toggle-window">Edit</span></td>
-        </tr>
-        <tr>
-            <td>Close Snipping</td>
-            <td id="shortcut-close-snipping"></td>
-            <td><span class="edit-btn" data-action="close-snipping">Edit</span></td>
-        </tr>
-        <tr>
-            <td>Toggle Controls</td>
-            <td id="shortcut-toggle-controls"></td>
-            <td><span class="edit-btn" data-action="toggle-controls">Edit</span></td>
-        </tr>
-        <tr>
-            <td>Increase Window Size</td>
-            <td id="shortcut-increase-window-size"></td>
-            <td><span class="edit-btn" data-action="increase-window-size">Edit</span></td>
-        </tr>
-        <tr>
-            <td>Decrease Window Size</td>
-            <td id="shortcut-decrease-window-size"></td>
-            <td><span class="edit-btn" data-action="decrease-window-size">Edit</span></td>
-        </tr>
-    </table>
-
-    <div class="button-bar">
-        <button class="button save-button">Save</button>
-        <button class="button back-button" onclick="window.history.back();">Go Back</button>
+    <div class="settings-container">
+        <div class="sidebar">
+            <ul class="tab-list">
+                <li class="tab-item active" data-tab="shortcuts">Shortcuts</li>
+                <li class="tab-item" data-tab="appearance">Appearance</li>
+            </ul>
+        </div>
+        <div class="content">
+            <div id="shortcuts" class="tab-content active">
+                <h2>Customize Shortcuts</h2>
+                <table class="shortcut-table">
+                    <tr>
+                        <th>Action</th>
+                        <th>Shortcut</th>
+                        <th>Edit</th>
+                    </tr>
+                    <tr>
+                        <td>Increase Opacity</td>
+                        <td id="shortcut-increase-opacity"></td>
+                        <td><span class="edit-btn" data-action="increase-opacity">Edit</span></td>
+                    </tr>
+                    <tr>
+                        <td>Decrease Opacity</td>
+                        <td id="shortcut-decrease-opacity"></td>
+                        <td><span class="edit-btn" data-action="decrease-opacity">Edit</span></td>
+                    </tr>
+                    <tr>
+                        <td>Set Minimum Opacity</td>
+                        <td id="shortcut-set-min-opacity"></td>
+                        <td><span class="edit-btn" data-action="set-min-opacity">Edit</span></td>
+                    </tr>
+                    <tr>
+                        <td>Set Maximum Opacity</td>
+                        <td id="shortcut-set-max-opacity"></td>
+                        <td><span class="edit-btn" data-action="set-max-opacity">Edit</span></td>
+                    </tr>
+                    <tr>
+                        <td>Quit App</td>
+                        <td id="shortcut-quit-app"></td>
+                        <td><span class="edit-btn" data-action="quit-app">Edit</span></td>
+                    </tr>
+                    <tr>
+                        <td>Toggle Window</td>
+                        <td id="shortcut-toggle-window"></td>
+                        <td><span class="edit-btn" data-action="toggle-window">Edit</span></td>
+                    </tr>
+                    <tr>
+                        <td>Close Snipping</td>
+                        <td id="shortcut-close-snipping"></td>
+                        <td><span class="edit-btn" data-action="close-snipping">Edit</span></td>
+                    </tr>
+                    <tr>
+                        <td>Toggle Controls</td>
+                        <td id="shortcut-toggle-controls"></td>
+                        <td><span class="edit-btn" data-action="toggle-controls">Edit</span></td>
+                    </tr>
+                    <tr>
+                        <td>Increase Window Size</td>
+                        <td id="shortcut-increase-window-size"></td>
+                        <td><span class="edit-btn" data-action="increase-window-size">Edit</span></td>
+                    </tr>
+                    <tr>
+                        <td>Decrease Window Size</td>
+                        <td id="shortcut-decrease-window-size"></td>
+                        <td><span class="edit-btn" data-action="decrease-window-size">Edit</span></td>
+                    </tr>
+                </table>
+                <div class="button-bar">
+                    <button class="button save-button">Save</button>
+                    <button class="button back-button" onclick="window.history.back();">Go Back</button>
+                </div>
+            </div>
+            <div id="appearance" class="tab-content">
+                <h2>Appearance Settings</h2>
+            </div>
+        </div>
     </div>
 
     <div id="shortcut-modal" class="modal">
@@ -80,6 +92,5 @@
     </div>
 
     <script src="../js/settings.js"></script>
-    
 </body>
 </html>

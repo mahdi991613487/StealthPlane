@@ -218,37 +218,67 @@ ipcMain.on('set-opacity', (event, value) => {
   mainWindow.setOpacity(value);
 });
 
-ipcMain.on('update-shortcut', (event, { action, newShortcut }) => {
-  if (action in shortcuts && /Control\+Shift\+[A-Za-z]/.test(newShortcut)) {
-    globalShortcut.unregister(shortcuts[action]);
-    shortcuts[action] = newShortcut;
-    globalShortcut.register(shortcuts[action], () => {
-      mainWindow.webContents.send(action);
-    });
-    saveShortcuts(shortcuts);
-  } else {
-    event.sender.send('invalid-shortcut');
-  }
-});
+// Shortcuts 
+
 ipcMain.on('get-shortcuts', (event) => {
   event.returnValue = loadShortcuts();
 });
+
 ipcMain.on('update-shortcuts', (event, updatedShortcuts) => {
-  Object.values(shortcuts).forEach((shortcut) => {
-    globalShortcut.unregister(shortcut);
-  });
-  Object.assign(shortcuts, updatedShortcuts);
-  saveShortcuts(shortcuts);
-  Object.entries(shortcuts).forEach(([action, shortcut]) => {
-    globalShortcut.register(shortcut, () => {
-      mainWindow.webContents.send(action);
+  // Attempt to register the updated shortcuts in a safe context first
+  try {
+    // Unregister all existing shortcuts to prevent conflicts
+    Object.values(shortcuts).forEach((shortcut) => {
+      globalShortcut.unregister(shortcut);
     });
-  });
+
+    // Temporarily register updated shortcuts to test for errors
+    Object.entries(updatedShortcuts).forEach(([action, shortcut]) => {
+      const registrationSuccess = globalShortcut.register(shortcut, () => {
+        console.log(`${action} shortcut registered successfully.`);
+      });
+
+      if (!registrationSuccess) {
+        // If registration fails, throw an error
+        throw new Error(`Failed to register shortcut for ${action}`);
+      }
+    });
+
+    // If all shortcuts were registered successfully, apply the updates
+    Object.assign(shortcuts, updatedShortcuts);
+    saveShortcuts(shortcuts);
+
+    // Unregister the test shortcuts and register them officially
+    Object.values(shortcuts).forEach((shortcut) => {
+      globalShortcut.unregister(shortcut);
+    });
+    Object.entries(shortcuts).forEach(([action, shortcut]) => {
+      globalShortcut.register(shortcut, () => {
+        mainWindow.webContents.send(action);
+      });
+    });
+
+    // If everything went well, send a success message to the renderer process
+    event.sender.send('update-shortcuts-success');
+  } catch (error) {
+    // In case of an error, do not save anything and re-register old shortcuts
+    console.error(`Error updating shortcuts: ${error.message}`);
+    event.sender.send('update-shortcuts-error', error.message);
+
+    // Re-register original shortcuts to ensure system remains in a consistent state
+    Object.entries(shortcuts).forEach(([action, shortcut]) => {
+      globalShortcut.register(shortcut, () => {
+        mainWindow.webContents.send(action);
+      });
+    });
+  }
+});
+
 
 
 
   
-});
+
 
 app.on('ready', () => {
   const loadedShortcuts = loadShortcuts();

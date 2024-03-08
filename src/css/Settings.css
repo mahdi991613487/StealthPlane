@@ -1,45 +1,112 @@
-body {
+html, body {
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
     font-family: Arial, sans-serif;
-    padding: 20px;
     background-color: #f4f4f4;
-    }
-    .shortcut-table {
+}
+
+.settings-container {
+    display: flex;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #f1f1f1;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.tab-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tab-item {
+    cursor: pointer;
+    padding: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.tab-item:hover,
+.tab-item.active {
+    background-color: #ddd;
+}
+
+.content {
+    flex-grow: 1;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.shortcut-table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
-    }
-    .shortcut-table th, .shortcut-table td {
+}
+
+.shortcut-table th, .shortcut-table td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
-    }
-    .shortcut-table th {
+}
+
+.shortcut-table th {
     background-color: #e0e0e0;
-    }
-    .edit-btn {
+}
+
+.edit-btn {
     cursor: pointer;
     color: #007bff;
     text-decoration: underline;
-    }
-    .button-bar {
+}
+
+.button-bar {
     text-align: right;
-    }
-    .button {
+    margin-top: 20px;
+}
+
+.button {
     padding: 10px 20px;
     color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 1em;
-    }
-    .save-button {
-    background-color: #28a745;
-    margin-right: 10px;
-    }
-    .back-button {
-    background-color: #dc3545;
-    }
-    .modal {
+    transition: background-color 0.2s ease;
+    outline: none;
+    margin-left: 10px; 
+}
+
+.save-button {
+    background-color: #4CAF50; 
+}
+
+.save-button:hover {
+    background-color: #45a049;
+}
+
+.back-button {
+    background-color: #f44336; 
+}
+
+.back-button:hover {
+    background-color: #d32f2f; 
+}
+
+.modal {
     display: none;
     position: fixed;
     z-index: 1;
@@ -49,8 +116,9 @@ body {
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.4);
-    }
-    .modal-content {
+}
+
+.modal-content {
     background-color: #fefefe;
     margin: 15% auto;
     padding: 20px;
@@ -59,4 +127,4 @@ body {
     text-align: center;
     border-radius: 5px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    }
+}

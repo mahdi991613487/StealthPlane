@@ -1,5 +1,7 @@
 const { ipcRenderer } = require('electron');
-const shortcuts = ipcRenderer.sendSync('get-shortcuts');
+let shortcuts = ipcRenderer.sendSync('get-shortcuts');
+let tempShortcuts = { ...shortcuts };
+
 Object.entries(shortcuts).forEach(([action, shortcut]) => {
   const shortcutElement = document.getElementById(`shortcut-${action}`);
   if (shortcutElement) {
@@ -20,11 +22,11 @@ async function openShortcutDialog(action) {
       if (key === 'Escape') {
         resolve(null);
         modal.style.display = 'none';
-      } else if (key === 'Control' || key === 'Shift' || key === 'Alt' || key === '+' || key == 'ContextMenu') {
+      } else if (key === 'Control' || key === 'Shift' || key === 'Alt' || key === '+' ) {
         resolve(null);
         modal.style.display = 'none';
       } else if (key) {
-        let newShortcut = key.toUpperCase(); 
+        let newShortcut = key.toUpperCase();
         
         switch (key) {
           case 'ArrowUp':
@@ -42,18 +44,31 @@ async function openShortcutDialog(action) {
         }
 
         const newShortcutString = `Control+Shift+${newShortcut}`;
-        if (!Object.values(shortcuts).includes(newShortcutString)) {
-          resolve(newShortcutString);
-          modal.style.display = 'none';
-        } else {
-          modal.style.display = 'none';
-          resolve(null);
+        
+        const existingAction = Object.entries(tempShortcuts).find(([_, shortcut]) => shortcut === newShortcutString)?.[0];
+        if (existingAction && existingAction !== action) {
+          const newKey = generateNewShortcut();
+          tempShortcuts[existingAction] = newKey; 
+          document.getElementById(`shortcut-${existingAction}`).textContent = newKey;
         }
+        
+        resolve(newShortcutString);
+        modal.style.display = 'none';
       }
     };
 
     window.addEventListener('keydown', handleKeyDown, { once: true });
   });
+}
+
+function generateNewShortcut() {
+  const availableKeys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let newKey;
+  do {
+    const randomIndex = Math.floor(Math.random() * availableKeys.length);
+    newKey = `Control+Shift+${availableKeys[randomIndex]}`;
+  } while (Object.values(tempShortcuts).includes(newKey)); 
+  return newKey;
 }
 
 document.querySelectorAll('.edit-btn').forEach(button => {
@@ -62,6 +77,7 @@ document.querySelectorAll('.edit-btn').forEach(button => {
     const newShortcut = await openShortcutDialog(action);
     if (newShortcut) {
       document.getElementById(`shortcut-${action}`).textContent = newShortcut;
+      tempShortcuts[action] = newShortcut; 
     }
   });
 });
@@ -73,5 +89,7 @@ document.querySelector('.save-button').addEventListener('click', function() {
     updatedShortcuts[action] = td.textContent;
   });
   ipcRenderer.send('update-shortcuts', updatedShortcuts);
+  shortcuts = { ...updatedShortcuts };
+  tempShortcuts = { ...updatedShortcuts };
   window.history.back();
 });
