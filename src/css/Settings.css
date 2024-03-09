@@ -2,9 +2,10 @@ html, body {
     height: 100vh;
     margin: 0;
     padding: 0;
-    overflow: auto;
+    overflow: hidden;
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
+
 }
 
 .settings-container {
@@ -75,7 +76,12 @@ html, body {
 
 .button-bar {
     text-align: right;
-    margin-top: 20px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .button {
@@ -87,11 +93,11 @@ html, body {
     font-size: 1em;
     transition: background-color 0.2s ease;
     outline: none;
-    margin-left: 10px; 
+    margin-left: 10px;
 }
 
 .save-button {
-    background-color: #4CAF50; 
+    background-color: #4CAF50;
 }
 
 .save-button:hover {
@@ -99,11 +105,11 @@ html, body {
 }
 
 .back-button {
-    background-color: #f44336; 
+    background-color: #f44336;
 }
 
 .back-button:hover {
-    background-color: #d32f2f; 
+    background-color: #d32f2f;
 }
 
 .modal {
@@ -128,6 +134,7 @@ html, body {
     border-radius: 5px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
+
 .appearance-settings {
     margin-bottom: 20px;
 }
@@ -146,3 +153,4 @@ html, body {
 .setting select {
     margin-left: auto;
 }
+

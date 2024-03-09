@@ -1,8 +1,8 @@
 html, body, #controls+webview {
     height: 100%;
-}
-
-body {
+    }
+    
+    body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
@@ -10,149 +10,147 @@ body {
     flex-direction: column;
     height: 100vh;
     overflow: hidden;
-	user-select: none;
-
-}
-
-#controls {
+    user-select: none;
+    
+    }
+    
+    #controls {
     display: flex;
     justify-content: space-between;
     padding: 5px;
     flex-shrink: 0;
-	user-select: none;
-
-}
-
-#url-bar-container {
+    user-select: none;
+    }
+    
+   
+    
+    #url-bar-container {
     flex: 1;
-    position: relative; 
+    position: relative;
     margin-right: 10px;
     margin-left: 10px;
-    display: flex; 
-    align-items: center; 
-}
-
-#url-bar {
+    display: flex;
+    align-items: center;
+    }
+    
+    #url-bar {
     width: calc(100% - 30px);
     height: 25px;
     border-radius: 12px;
     background-color: #242528;
     color: white;
-    padding-right: 40px; 
+    padding-right: 40px;
     padding-left: 10px;
     border: none;
-}
-
-#zoom-icon {
+    }
+    
+    #zoom-icon {
     position: absolute;
     right: 5px;
     cursor: pointer;
-    width: 20px; 
-    height: 20px; 
-}
-
-
-
-#url-bar:focus {
+    width: 20px;
+    height: 20px;
+    }
+    
+    #url-bar:focus {
     outline: none;
     box-shadow: 0 0 5px rgba(81, 203, 238, 1);
-}
-
-#brightness-slider {
+    }
+    
+    #brightness-slider {
     width: 200px;
     height: 25px;
-}
-
-webview {
+    }
+    
+    webview {
     flex-grow: 1;
     width: 100%;
     overflow: hidden;
-}
-
-.disabled-icon {
+    }
+    
+    .disabled-icon {
     filter: grayscale(100%);
     opacity: 0.5;
     pointer-events: none;
-}
-
-@keyframes closeScissors {
+    }
+    
+    @keyframes closeScissors {
     0% {
-        transform: rotate(0deg);
+    transform: rotate(0deg);
     }
     100% {
-        transform: rotate(45deg);
+    transform: rotate(45deg);
     }
-}
-
-@keyframes openScissors {
+    }
+    
+    @keyframes openScissors {
     0% {
-        transform: rotate(45deg);
+    transform: rotate(45deg);
     }
     100% {
-        transform: rotate(0deg);
+    transform: rotate(0deg);
     }
-}
-
-#snip-button {
+    }
+    
+    #snip-button {
     width: 25px;
     height: 25px;
     cursor: pointer;
     animation: openScissors 0.3s forwards;
-}
-
-#snip-button:hover {
+    }
+    
+    #snip-button:hover {
     animation: closeScissors 0.3s forwards;
-}
-
-#back-button, #forward-button {
+    }
+    
+    #back-button, #forward-button {
     height: auto;
     cursor: pointer;
     transition: transform 0.3s;
-}
-
-#back-button:hover {
+    }
+    
+    #back-button:hover {
     transform: translateX(-5px);
-}
-
-#forward-button:hover {
+    }
+    
+    #forward-button:hover {
     transform: translateX(5px);
-}
-
-.disabled-button {
+    }
+    
+    .disabled-button {
     filter: grayscale(100%);
     opacity: 0.5;
     pointer-events: none;
     transform: none !important;
-}
-
-.disabled-button:hover {
+    }
+    
+    .disabled-button:hover {
     transform: none;
-}
-@keyframes spin {
+    }
+    @keyframes spin {
     0% {
-        transform: rotate(0deg);
+    transform: rotate(0deg);
     }
     100% {
-        transform: rotate(360deg);
+    transform: rotate(360deg);
     }
-}
-
-#settings-button {
+    }
+    
+    #settings-button {
     width: 25px;
     height: 25px;
     cursor: pointer;
-    transition: transform 0.3s; 
-    margin-left: 10px;  
-    animation: spin 5s linear infinite; 
-    animation-play-state: paused;  
-	
-
-}
-
-#settings-button:hover {
-    animation-play-state: running;  
-}
-
-.gray {
-    color: gray;
-  }
+    transition: transform 0.3s;
+    margin-left: 10px;
+    
+    animation: spin 5s linear infinite;
+    animation-play-state: paused;
+    
+    }
+    
+    #settings-button:hover {
+    animation-play-state: running;
+    
+    }
+    
+  

@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Settings</title>
     <link rel="stylesheet" href="../css/settings.css">
+    <link rel="stylesheet" href="../css/color.css">
+    
 </head>
-<body>
+<body class="dark-mode">
     <div class="settings-container">
         <div class="sidebar">
             <ul class="tab-list">
@@ -85,8 +87,8 @@
                     <div class="setting">
                         <label for="color-mode">Color Mode</label>
                         <select id="color-mode">
-                            <option value="light">Light Mode</option>
-                            <option value="dark">Dark Mode</option>
+                            <option value="light" data-mode="light">Light Mode</option>
+                            <option value="dark" data-mode="dark">Dark Mode</option>
                         </select>
                     </div>
                 </div>

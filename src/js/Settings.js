@@ -4,6 +4,16 @@ const tabContents = document.querySelectorAll('.tab-content');
 const disableFrameCheckbox = document.getElementById('disable-frame');
 const saveButton = document.querySelector('.save-button');
 
+const colorModeSelect = document.getElementById('color-mode');
+let initialColorMode = 'dark';
+
+colorModeSelect.addEventListener('change', function() {
+  const selectedMode = this.options[this.selectedIndex].dataset.mode;
+  const isDarkMode = selectedMode === 'dark';
+  document.body.classList.toggle('dark-mode', isDarkMode);
+  document.body.classList.toggle('light-mode', !isDarkMode);
+});
+
 saveButton.addEventListener('click', function() {
   const activeTab = document.querySelector('.tab-content.active');
   if (activeTab.id === 'appearance') {
@@ -11,6 +21,12 @@ saveButton.addEventListener('click', function() {
     if (isFrameDisabled !== initialIsFrameDisabled) { 
       ipcRenderer.send('set-frame-disabled', isFrameDisabled); 
     }
+    
+    const selectedColorMode = colorModeSelect.options[colorModeSelect.selectedIndex].dataset.mode;
+    if (selectedColorMode !== initialColorMode) {
+      ipcRenderer.send('set-color-mode', selectedColorMode);
+    }
+    
     ipcRenderer.send('save-settings');
   } else if (activeTab.id === 'shortcuts') {
     const updatedShortcuts = {};
@@ -26,12 +42,19 @@ saveButton.addEventListener('click', function() {
 });
 
 ipcRenderer.send('get-frame-disabled');
+ipcRenderer.send('get-color-mode');
 
 let initialIsFrameDisabled = false; 
 
 ipcRenderer.on('frame-disabled', (event, isFrameDisabled) => {
   disableFrameCheckbox.checked = isFrameDisabled;
   initialIsFrameDisabled = isFrameDisabled; 
+});
+
+ipcRenderer.on('color-mode', (event, colorMode) => {
+  initialColorMode = colorMode;
+  colorModeSelect.value = colorMode;
+  document.body.classList.toggle('dark-mode', colorMode === 'dark');
 });
 
 tabItems.forEach(item => {

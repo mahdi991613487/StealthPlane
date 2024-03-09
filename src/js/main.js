@@ -3,6 +3,7 @@ const electronContextMenu = require('electron-context-menu');
 const { desktopCapturer, nativeImage, screen } = require('electron');
 const path = require('path');
 const fs = require('fs');
+let colorMode = 'dark';
 
 let mainWindow;
 let tray = null;
@@ -301,7 +302,14 @@ ipcMain.on('set-frame-disabled', (event, disabled) => {
   });
 });
 
+ipcMain.on('set-color-mode', (event, mode) => {
+  colorMode = mode;
+  saveSettings();
+});
 
+ipcMain.on('get-color-mode', (event) => {
+  event.reply('color-mode', colorMode);
+});
 ipcMain.on('get-frame-disabled', (event) => {
   event.reply('frame-disabled', isFrameDisabled);
 });
@@ -309,6 +317,7 @@ ipcMain.on('get-frame-disabled', (event) => {
 function saveSettings() {
   const settings = {
     isFrameDisabled: isFrameDisabled,
+    colorMode: colorMode,
   };
   fs.writeFileSync(path.join(userDataPath, 'settings.json'), JSON.stringify(settings));
 }
@@ -320,11 +329,13 @@ function loadSettings() {
       const settingsData = fs.readFileSync(settingsPath, 'utf8');
       const settings = JSON.parse(settingsData);
       isFrameDisabled = settings.isFrameDisabled || false;
+      colorMode = settings.colorMode || 'dark';
     }
   } catch (error) {
     console.error('Error loading settings:', error);
   }
 }
+
 
 app.on('ready', () => {
   loadSettings();
