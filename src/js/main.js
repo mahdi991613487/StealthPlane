@@ -265,6 +265,8 @@ ipcMain.on('update-shortcuts', (event, updatedShortcuts) => {
   }
 });
 
+// Toggle Frame Function 
+
 ipcMain.on('set-frame-disabled', (event, disabled) => {
   isFrameDisabled = disabled;
   saveSettings();
@@ -287,7 +289,7 @@ ipcMain.on('set-frame-disabled', (event, disabled) => {
     },
   });
 
-  newWindow.loadURL(mainWindow.webContents.getURL());
+  newWindow.loadFile(path.join(__dirname, '..', 'html', 'index.html'));
 
   newWindow.once('ready-to-show', () => {
     mainWindow.destroy();
@@ -298,6 +300,7 @@ ipcMain.on('set-frame-disabled', (event, disabled) => {
     }
   });
 });
+
 
 ipcMain.on('get-frame-disabled', (event) => {
   event.reply('frame-disabled', isFrameDisabled);

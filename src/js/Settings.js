@@ -2,28 +2,50 @@ const { ipcRenderer } = require('electron');
 const tabItems = document.querySelectorAll('.tab-item');
 const tabContents = document.querySelectorAll('.tab-content');
 const disableFrameCheckbox = document.getElementById('disable-frame');
+const saveButton = document.querySelector('.save-button');
 
-disableFrameCheckbox.addEventListener('change', function() {
-  const isFrameDisabled = this.checked;
-  ipcRenderer.send('set-frame-disabled', isFrameDisabled);
+saveButton.addEventListener('click', function() {
+  const activeTab = document.querySelector('.tab-content.active');
+  if (activeTab.id === 'appearance') {
+    const isFrameDisabled = disableFrameCheckbox.checked;
+    if (isFrameDisabled !== initialIsFrameDisabled) { 
+      ipcRenderer.send('set-frame-disabled', isFrameDisabled); 
+    }
+    ipcRenderer.send('save-settings');
+  } else if (activeTab.id === 'shortcuts') {
+    const updatedShortcuts = {};
+    document.querySelectorAll('.shortcut-table td[id^="shortcut-"]').forEach((td) => {
+      const action = td.id.replace('shortcut-', '');
+      updatedShortcuts[action] = td.textContent;
+    });
+    ipcRenderer.send('update-shortcuts', updatedShortcuts);
+    shortcuts = { ...updatedShortcuts };
+    tempShortcuts = { ...updatedShortcuts };
+  }
+  window.history.back();
 });
 
 ipcRenderer.send('get-frame-disabled');
 
+let initialIsFrameDisabled = false; 
+
 ipcRenderer.on('frame-disabled', (event, isFrameDisabled) => {
   disableFrameCheckbox.checked = isFrameDisabled;
+  initialIsFrameDisabled = isFrameDisabled; 
 });
-tabItems.forEach(item => {
-    item.addEventListener('click', function() {
-        const tabId = this.getAttribute('data-tab');
-        
-        tabItems.forEach(item => item.classList.remove('active'));
-        tabContents.forEach(content => content.classList.remove('active'));
 
-        this.classList.add('active');
-        document.getElementById(tabId).classList.add('active');
-    });
+tabItems.forEach(item => {
+  item.addEventListener('click', function() {
+    const tabId = this.getAttribute('data-tab');
+    
+    tabItems.forEach(item => item.classList.remove('active'));
+    tabContents.forEach(content => content.classList.remove('active'));
+
+    this.classList.add('active');
+    document.getElementById(tabId).classList.add('active');
+  });
 });
+
 let shortcuts = ipcRenderer.sendSync('get-shortcuts');
 let tempShortcuts = { ...shortcuts };
 
@@ -47,7 +69,7 @@ async function openShortcutDialog(action) {
       if (key === 'Escape') {
         resolve(null);
         modal.style.display = 'none';
-      } else if (key === 'Control' || key === 'Shift' || key === 'Alt' || key === '+' ) {
+      } else if (key === 'Control' || key === 'Shift' || key === 'Alt' || key === '+') {
         resolve(null);
         modal.style.display = 'none';
       } else if (key) {
@@ -106,16 +128,3 @@ document.querySelectorAll('.edit-btn').forEach(button => {
     }
   });
 });
-
-document.querySelector('.save-button').addEventListener('click', function() {
-  const updatedShortcuts = {};
-  document.querySelectorAll('.shortcut-table td[id^="shortcut-"]').forEach((td) => {
-    const action = td.id.replace('shortcut-', '');
-    updatedShortcuts[action] = td.textContent;
-  });
-  ipcRenderer.send('update-shortcuts', updatedShortcuts);
-  shortcuts = { ...updatedShortcuts };
-  tempShortcuts = { ...updatedShortcuts };
-  window.history.back();
-});
-
