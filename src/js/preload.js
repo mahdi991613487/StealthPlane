@@ -213,7 +213,7 @@ ipcRenderer.on('set-max-opacity', () => {
   ipcRenderer.send('set-opacity', parseFloat(brightnessSlider.value));
 });
   document.getElementById('settings-button').addEventListener('click', function() {
-window.location.href = "../html/Settings.html";
+window.location.href = "../html/settings.html";
 });
 const zoomIcon = document.getElementById('zoom-icon');
 

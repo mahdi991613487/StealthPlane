@@ -75,7 +75,7 @@ function createWindow() {
     mainWindow.show();
     app.dock && app.dock.show();
 
-    mainWindow.setAlwaysOnTop(true, 'screen-saver');
+    mainWindow.setAlwaysOnTop(true);
     mainWindow.setVisibleOnAllWorkspaces(true);
     mainWindow.setFullScreenable(false);
   });
