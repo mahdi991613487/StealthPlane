@@ -63,7 +63,7 @@ function createWindow() {
     },
   });
 
-  mainWindow.loadFile(path.join(__dirname, '..', 'html', 'index.html'));
+  mainWindow.loadFile(path.join(__dirname, '..', 'html', 'coverpage.html'));
 
   electronContextMenu({
     window: mainWindow,
@@ -214,6 +214,12 @@ class SnippingTool {
 
 let snippingTool = new SnippingTool();
 
+ipcMain.on('start-navigation', (event, urlOrQuery) => {
+  mainWindow.loadFile(path.join(__dirname, '..', 'html', 'index.html'));
+  mainWindow.webContents.once('did-finish-load', () => {
+    mainWindow.webContents.send('navigate-from-cover', urlOrQuery);
+  });
+});
 ipcMain.on('navigate', (event, url) => {
   event.sender.send('load-webview', url);
 });

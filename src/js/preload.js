@@ -190,6 +190,16 @@ document.getElementById('url-bar').addEventListener('blur', (event) => {
    webview.setAttribute('src', url);
 });
 
+ipcRenderer.on('navigate-from-cover', (event, urlOrQuery) => {
+  let url = urlOrQuery;
+  if (!isValidURL(url)) {
+    url = `https://www.google.com/search?q=${encodeURIComponent(url)}`;
+  } else if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    url = 'https://' + url;
+  }
+  webview.setAttribute('src', url);
+});
+
 ipcRenderer.on('increase-opacity', () => {
   const brightnessSlider = document.getElementById('brightness-slider');
   brightnessSlider.value = Math.min(brightnessSlider.max, parseFloat(brightnessSlider.value) + 0.01);

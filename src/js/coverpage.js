@@ -1,4 +1,16 @@
+const { ipcRenderer } = require('electron');
+
+
 document.addEventListener('DOMContentLoaded', function() {
+    const startUrlBar = document.getElementById('start-url-bar');
+    startUrlBar.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const urlOrQuery = e.target.value;
+        ipcRenderer.send('start-navigation', urlOrQuery);
+      }
+    });
+
+
     var canvas = document.getElementById('spaceCanvas');
     var ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
