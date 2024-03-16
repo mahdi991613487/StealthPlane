@@ -3,10 +3,14 @@ const tabItems = document.querySelectorAll('.tab-item');
 const tabContents = document.querySelectorAll('.tab-content');
 const disableFrameCheckbox = document.getElementById('disable-frame');
 const saveButton = document.querySelector('.save-button');
-
 const colorModeSelect = document.getElementById('color-mode');
-let initialColorMode = 'dark';
 
+let initialColorMode = 'dark';
+let initialIsFrameDisabled = false; 
+let shortcuts = ipcRenderer.sendSync('get-shortcuts');
+let tempShortcuts = { ...shortcuts };
+
+// Event listener for color mode selection
 colorModeSelect.addEventListener('change', function() {
   const selectedMode = this.options[this.selectedIndex].dataset.mode;
   const isDarkMode = selectedMode === 'dark';
@@ -14,8 +18,10 @@ colorModeSelect.addEventListener('change', function() {
   document.body.classList.toggle('light-mode', !isDarkMode);
 });
 
+// Event listener for save button click
 saveButton.addEventListener('click', function() {
   const activeTab = document.querySelector('.tab-content.active');
+  
   if (activeTab.id === 'appearance') {
     const isFrameDisabled = disableFrameCheckbox.checked;
     if (isFrameDisabled !== initialIsFrameDisabled) { 
@@ -38,25 +44,29 @@ saveButton.addEventListener('click', function() {
     shortcuts = { ...updatedShortcuts };
     tempShortcuts = { ...updatedShortcuts };
   }
+  
   window.history.back();
 });
 
+// Send IPC messages to get initial values
 ipcRenderer.send('get-frame-disabled');
 ipcRenderer.send('get-color-mode');
 
-let initialIsFrameDisabled = false; 
-
+// Handle IPC response for frame disabled state
 ipcRenderer.on('frame-disabled', (event, isFrameDisabled) => {
   disableFrameCheckbox.checked = isFrameDisabled;
   initialIsFrameDisabled = isFrameDisabled; 
 });
 
+
+// Handle IPC response for color mode
 ipcRenderer.on('color-mode', (event, colorMode) => {
   initialColorMode = colorMode;
   colorModeSelect.value = colorMode;
   document.body.classList.toggle('dark-mode', colorMode === 'dark');
 });
 
+// Event listeners for tab item clicks
 tabItems.forEach(item => {
   item.addEventListener('click', function() {
     const tabId = this.getAttribute('data-tab');
@@ -69,9 +79,7 @@ tabItems.forEach(item => {
   });
 });
 
-let shortcuts = ipcRenderer.sendSync('get-shortcuts');
-let tempShortcuts = { ...shortcuts };
-
+// Initialize shortcut elements with current shortcut values
 Object.entries(shortcuts).forEach(([action, shortcut]) => {
   const shortcutElement = document.getElementById(`shortcut-${action}`);
   if (shortcutElement) {
@@ -79,6 +87,7 @@ Object.entries(shortcuts).forEach(([action, shortcut]) => {
   }
 });
 
+// Function to open shortcut dialog and handle shortcut editing
 async function openShortcutDialog(action) {
   return new Promise((resolve) => {
     const modal = document.getElementById('shortcut-modal');
@@ -131,6 +140,7 @@ async function openShortcutDialog(action) {
   });
 }
 
+// Function to generate a new unique shortcut
 function generateNewShortcut() {
   const availableKeys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   let newKey;
@@ -141,6 +151,7 @@ function generateNewShortcut() {
   return newKey;
 }
 
+// Event listeners for edit buttons
 document.querySelectorAll('.edit-btn').forEach(button => {
   button.addEventListener('click', async function() {
     const action = this.dataset.action;

@@ -6,7 +6,6 @@
     <title>Settings</title>
     <link rel="stylesheet" href="../css/settings.css">
     <link rel="stylesheet" href="../css/color.css">
-    
 </head>
 <body class="dark-mode">
     <div class="settings-container">
@@ -36,6 +35,16 @@
                         <td><span class="edit-btn" data-action="decrease-opacity">Edit</span></td>
                     </tr>
                     <tr>
+                        <td>Increase Window Size</td>
+                        <td id="shortcut-increase-window-size"></td>
+                        <td><span class="edit-btn" data-action="increase-window-size">Edit</span></td>
+                    </tr>
+                    <tr>
+                        <td>Decrease Window Size</td>
+                        <td id="shortcut-decrease-window-size"></td>
+                        <td><span class="edit-btn" data-action="decrease-window-size">Edit</span></td>
+                    </tr>
+                    <tr>
                         <td>Set Minimum Opacity</td>
                         <td id="shortcut-set-min-opacity"></td>
                         <td><span class="edit-btn" data-action="set-min-opacity">Edit</span></td>
@@ -56,25 +65,21 @@
                         <td><span class="edit-btn" data-action="toggle-window">Edit</span></td>
                     </tr>
                     <tr>
-                        <td>Close Snipping</td>
-                        <td id="shortcut-close-snipping"></td>
-                        <td><span class="edit-btn" data-action="close-snipping">Edit</span></td>
-                    </tr>
-                    <tr>
                         <td>Toggle Controls</td>
                         <td id="shortcut-toggle-controls"></td>
                         <td><span class="edit-btn" data-action="toggle-controls">Edit</span></td>
                     </tr>
                     <tr>
-                        <td>Increase Window Size</td>
-                        <td id="shortcut-increase-window-size"></td>
-                        <td><span class="edit-btn" data-action="increase-window-size">Edit</span></td>
+                        <td>Snipping Tool</td>
+                        <td id="shortcut-snipping-tool"></td>
+                        <td><span class="edit-btn" data-action="snipping-tool">Edit</span></td>
                     </tr>
                     <tr>
-                        <td>Decrease Window Size</td>
-                        <td id="shortcut-decrease-window-size"></td>
-                        <td><span class="edit-btn" data-action="decrease-window-size">Edit</span></td>
+                        <td>Toggle Frame</td>
+                        <td id="shortcut-toggle-frame"></td>
+                        <td><span class="edit-btn" data-action="toggle-frame">Edit</span></td>
                     </tr>
+                    
                 </table>
             </div>
             <div id="appearance" class="tab-content">
@@ -107,5 +112,6 @@
     </div>
 
     <script src="../js/settings.js"></script>
+    
 </body>
 </html>

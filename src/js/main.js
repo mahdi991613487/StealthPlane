@@ -3,28 +3,34 @@ const electronContextMenu = require('electron-context-menu');
 const { desktopCapturer, nativeImage, screen } = require('electron');
 const path = require('path');
 const fs = require('fs');
-let colorMode = 'dark';
 
-let mainWindow;
-let tray = null;
 const imagePath = path.join(__dirname, '..', 'assets', 'img');
 const userDataPath = app.getPath('userData');
 const shortcutsFilePath = path.join(userDataPath, 'shortcuts.json');
 const shortcuts = {
-  'increase-opacity': 'Control+Shift+Up',
-  'decrease-opacity': 'Control+Shift+Down',
+  'increase-opacity': 'Control+Shift+Right',
+  'decrease-opacity': 'Control+Shift+Left',
+  'increase-window-size': 'Control+Shift+Up',
+  'decrease-window-size': 'Control+Shift+Down',
   'set-min-opacity': 'Control+Shift+Z',
   'set-max-opacity': 'Control+Shift+X',
   'quit-app': 'Control+Shift+Q',
   'toggle-window': 'Control+Shift+W',
-  'close-snipping': 'Control+Shift+S',
   'toggle-controls': 'Control+Shift+H',
-  'increase-window-size': 'Control+Shift+=',
-  'decrease-window-size': 'Control+Shift+-'
+  'snipping-tool': 'Control+Shift+S',
+  'toggle-frame': 'Control+Shift+F',
+
 };
 
+// Global variables
+let colorMode = 'dark';
+let windowPosition = { x: 0, y: 0 };
+let mainWindow;
+let tray = null;
 let isFrameDisabled = false;
+let mainWindowSize = { width: 750, height: 650 };
 
+// Helper functions
 function loadShortcuts() {
   try {
     if (fs.existsSync(shortcutsFilePath)) {
@@ -45,11 +51,14 @@ function saveShortcuts(shortcuts) {
   }
 }
 
+// Window creation and management
 function createWindow() {
   mainWindow = new BrowserWindow({
     title: 'Floating Browser',
-    width: 750,
-    height: 650,
+    width: mainWindowSize.width,
+    height: mainWindowSize.height,
+    x: windowPosition.x,
+    y: windowPosition.y,
     autoHideMenuBar: true,
     backgroundColor: '#16171a',
     show: false,
@@ -75,7 +84,7 @@ function createWindow() {
     mainWindow.show();
     app.dock && app.dock.show();
 
-    mainWindow.setAlwaysOnTop(true);
+    mainWindow.setAlwaysOnTop(true, 'screen-saver');
     mainWindow.setVisibleOnAllWorkspaces(true);
     mainWindow.setFullScreenable(false);
   });
@@ -111,11 +120,11 @@ function createTrayIcon() {
   });
 }
 
+// Snipping Tool
 class SnippingTool {
   constructor() {
     this.snipWindow = null;
     this.fullScreenshot = null;
-
     this.attachEventListeners();
   }
 
@@ -214,12 +223,135 @@ class SnippingTool {
 
 let snippingTool = new SnippingTool();
 
+// IPC event listeners
+const MIN_WIDTH = 500;
+const MIN_HEIGHT = 300;
+const MAX_WIDTH = 2560;
+const MAX_HEIGHT = 1440;
+
+function keepWindowOnScreen(window) {
+  const { x, y, width, height } = window.getBounds();
+  const { workArea } = screen.getDisplayMatching(window.getBounds());
+
+  let newX = x;
+  let newY = y;
+
+  if (x < workArea.x) {
+    newX = workArea.x;
+  } else if (x + width > workArea.x + workArea.width) {
+    newX = workArea.x + workArea.width - width;
+  }
+
+  if (y < workArea.y) {
+    newY = workArea.y;
+  } else if (y + height > workArea.y + workArea.height) {
+    newY = workArea.y + workArea.height - height;
+  }
+
+  if (newX !== x || newY !== y) {
+    window.setPosition(newX, newY);
+  }
+}
+
+ipcMain.on('increase-window-size', () => {
+  let { width, height, x, y } = mainWindow.getBounds();
+  const newWidth = Math.min(width + 100, MAX_WIDTH);
+  const newHeight = Math.min(height + 100, MAX_HEIGHT);
+  const deltaWidth = newWidth - width;
+  const deltaHeight = newHeight - height;
+  const newX = x - deltaWidth / 2;
+  const newY = y - deltaHeight / 2;
+  mainWindow.setBounds({
+    width: newWidth,
+    height: newHeight,
+    x: newX,
+    y: newY,
+  });
+  keepWindowOnScreen(mainWindow);
+});
+
+ipcMain.on('decrease-window-size', () => {
+  let { width, height, x, y } = mainWindow.getBounds();
+  const newWidth = Math.max(width - 100, MIN_WIDTH);
+  const newHeight = Math.max(height - 100, MIN_HEIGHT);
+  const deltaWidth = width - newWidth;
+  const deltaHeight = height - newHeight;
+  const newX = x + deltaWidth / 2;
+  const newY = y + deltaHeight / 2;
+  mainWindow.setBounds({
+    width: newWidth,
+    height: newHeight,
+    x: newX,
+    y: newY,
+  });
+  keepWindowOnScreen(mainWindow);
+});
+
+
+ipcMain.on('toggle-frame', () => {
+  isFrameDisabled = !isFrameDisabled;
+  saveSettings();
+
+  const wasVisible = mainWindow.isVisible();
+  const [width, height] = mainWindow.getSize();
+  windowPosition = mainWindow.getPosition();
+
+  const newWindow = new BrowserWindow({
+    title: 'Floating Browser',
+    width: width,
+    height: height,
+    x: windowPosition[0],
+    y: windowPosition[1],
+    autoHideMenuBar: true,
+    backgroundColor: '#16171a',
+    show: false,
+    icon: path.join(imagePath, 'StealthPlane.png'),
+    frame: !isFrameDisabled,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
+      webviewTag: true
+    },
+  });
+
+  newWindow.loadFile(path.join(__dirname, '..', 'html', 'coverpage.html'));
+
+  newWindow.once('ready-to-show', () => {
+    mainWindow.destroy();
+    mainWindow = newWindow;
+    mainWindow.setAlwaysOnTop(true, 'screen-saver');
+    mainWindow.setVisibleOnAllWorkspaces(true);
+    mainWindow.setFullScreenable(false);
+    if (wasVisible) {
+      mainWindow.show();
+    }
+  });
+});
+
+ipcMain.on('snipping-tool', () => {
+  snippingTool.startSnipping();
+});
+
+ipcMain.on('quit-app', () => {
+  app.quit();
+});
+
+ipcMain.on('toggle-window', () => {
+  if (mainWindow.isVisible()) {
+    mainWindow.hide();
+  } else {
+    mainWindow.show();
+  }
+});
+
 ipcMain.on('start-navigation', (event, urlOrQuery) => {
   mainWindow.loadFile(path.join(__dirname, '..', 'html', 'index.html'));
   mainWindow.webContents.once('did-finish-load', () => {
     mainWindow.webContents.send('navigate-from-cover', urlOrQuery);
   });
 });
+
 ipcMain.on('navigate', (event, url) => {
   event.sender.send('load-webview', url);
 });
@@ -272,17 +404,20 @@ ipcMain.on('update-shortcuts', (event, updatedShortcuts) => {
   }
 });
 
-// Toggle Frame Function 
-
 ipcMain.on('set-frame-disabled', (event, disabled) => {
   isFrameDisabled = disabled;
   saveSettings();
 
   const wasVisible = mainWindow.isVisible();
+  const [width, height] = mainWindow.getSize();
+  windowPosition = mainWindow.getPosition();
+
   const newWindow = new BrowserWindow({
     title: 'Floating Browser',
-    width: mainWindow.getSize()[0],
-    height: mainWindow.getSize()[1],
+    width: width,
+    height: height,
+    x: windowPosition[0],
+    y: windowPosition[1],
     autoHideMenuBar: true,
     backgroundColor: '#16171a',
     show: false,
@@ -296,12 +431,14 @@ ipcMain.on('set-frame-disabled', (event, disabled) => {
     },
   });
 
-  newWindow.loadFile(path.join(__dirname, '..', 'html', 'index.html'));
+  newWindow.loadFile(path.join(__dirname, '..', 'html', 'coverpage.html'));
 
   newWindow.once('ready-to-show', () => {
     mainWindow.destroy();
     mainWindow = newWindow;
-
+    mainWindow.setAlwaysOnTop(true, 'screen-saver');
+    mainWindow.setVisibleOnAllWorkspaces(true);
+    mainWindow.setFullScreenable(false);
     if (wasVisible) {
       mainWindow.show();
     }
@@ -316,6 +453,7 @@ ipcMain.on('set-color-mode', (event, mode) => {
 ipcMain.on('get-color-mode', (event) => {
   event.reply('color-mode', colorMode);
 });
+
 ipcMain.on('get-frame-disabled', (event) => {
   event.reply('frame-disabled', isFrameDisabled);
 });
@@ -324,6 +462,7 @@ function saveSettings() {
   const settings = {
     isFrameDisabled: isFrameDisabled,
     colorMode: colorMode,
+    windowPosition: windowPosition,
   };
   fs.writeFileSync(path.join(userDataPath, 'settings.json'), JSON.stringify(settings));
 }
@@ -336,12 +475,12 @@ function loadSettings() {
       const settings = JSON.parse(settingsData);
       isFrameDisabled = settings.isFrameDisabled || false;
       colorMode = settings.colorMode || 'dark';
+      windowPosition = settings.windowPosition || { x: 0, y: 0 };
     }
   } catch (error) {
     console.error('Error loading settings:', error);
   }
 }
-
 
 app.on('ready', () => {
   loadSettings();

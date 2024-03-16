@@ -1,156 +1,134 @@
 html, body, #controls+webview {
     height: 100%;
-    }
-    
-    body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    overflow: hidden;
-    user-select: none;
-    
-    }
-    
-    #controls {
-    display: flex;
-    justify-content: space-between;
-    padding: 5px;
-    flex-shrink: 0;
-    user-select: none;
-    }
-    
-   
-    
-    #url-bar-container {
-    flex: 1;
-    position: relative;
-    margin-right: 10px;
-    margin-left: 10px;
-    display: flex;
-    align-items: center;
-    }
-    
-    #url-bar {
-    width: calc(100% - 30px);
-    height: 25px;
-    border-radius: 12px;
-    background-color: #242528;
-    color: white;
-    padding-right: 40px;
-    padding-left: 10px;
-    border: none;
-    }
-    
-    #zoom-icon {
-    position: absolute;
-    right: 5px;
-    cursor: pointer;
-    width: 20px;
-    height: 20px;
-    }
-    
-    #url-bar:focus {
-    outline: none;
-    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
-    }
-    
-    #brightness-slider {
-    width: 200px;
-    height: 25px;
-    }
-    
-    webview {
-    flex-grow: 1;
-    width: 100%;
-    overflow: hidden;
-    }
-    
-    .disabled-icon {
-    filter: grayscale(100%);
-    opacity: 0.5;
-    pointer-events: none;
-    }
-    
-    @keyframes closeScissors {
-    0% {
-    transform: rotate(0deg);
-    }
-    100% {
-    transform: rotate(45deg);
-    }
-    }
-    
-    @keyframes openScissors {
-    0% {
-    transform: rotate(45deg);
-    }
-    100% {
-    transform: rotate(0deg);
-    }
-    }
-    
-    #snip-button {
-    width: 25px;
-    height: 25px;
-    cursor: pointer;
-    animation: openScissors 0.3s forwards;
-    }
-    
-    #snip-button:hover {
-    animation: closeScissors 0.3s forwards;
-    }
-    
-    #back-button, #forward-button {
-    height: auto;
-    cursor: pointer;
-    transition: transform 0.3s;
-    }
-    
-    #back-button:hover {
-    transform: translateX(-5px);
-    }
-    
-    #forward-button:hover {
-    transform: translateX(5px);
-    }
-    
-    .disabled-button {
-    filter: grayscale(100%);
-    opacity: 0.5;
-    pointer-events: none;
-    transform: none !important;
-    }
-    
-    .disabled-button:hover {
-    transform: none;
-    }
-    @keyframes spin {
-    0% {
-    transform: rotate(0deg);
-    }
-    100% {
-    transform: rotate(360deg);
-    }
-    }
-    
-    #settings-button {
-    width: 25px;
-    height: 25px;
-    cursor: pointer;
-    transition: transform 0.3s;
-    margin-left: 10px;
-    
-    animation: spin 5s linear infinite;
-    animation-play-state: paused;
-    
-    }
-    
-    #settings-button:hover {
-    animation-play-state: running;
-    
-    }
-    
-  
+}
+
+body {
+margin: 0;
+padding: 0;
+font-family: Arial, sans-serif;
+display: flex;
+flex-direction: column;
+height: 100vh;
+overflow: hidden;
+user-select: none;
+}
+
+#controls {
+display: flex;
+justify-content: space-between;
+padding: 5px;
+flex-shrink: 0;
+user-select: none;
+}
+
+#url-bar-container {
+flex: 1;
+position: relative;
+margin-right: 10px;
+margin-left: 10px;
+display: flex;
+align-items: center;
+}
+
+#url-bar {
+width: 100%;
+height: 25px;
+border-radius: 12px;
+background-color: #242528;
+color: white;
+padding-left: 10px;
+border: none;
+}
+
+#url-bar:focus {
+outline: none;
+box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+}
+
+#brightness-slider {
+width: 200px;
+height: 25px;
+}
+
+.disabled-icon {
+filter: grayscale(100%);
+opacity: 0.5;
+pointer-events: none;
+}
+
+@keyframes closeScissors {
+0% {
+transform: rotate(0deg);
+}
+100% {
+transform: rotate(45deg);
+}
+}
+
+@keyframes openScissors {
+0% {
+transform: rotate(45deg);
+}
+100% {
+transform: rotate(0deg);
+}
+}
+
+#snip-button {
+width: 25px;
+height: 25px;
+cursor: pointer;
+animation: openScissors 0.3s forwards;
+}
+
+#snip-button:hover {
+animation: closeScissors 0.3s forwards;
+}
+
+#back-button, #forward-button {
+height: auto;
+cursor: pointer;
+transition: transform 0.3s;
+}
+
+#back-button:hover {
+transform: translateX(-5px);
+}
+
+#forward-button:hover {
+transform: translateX(5px);
+}
+
+.disabled-button {
+filter: grayscale(100%);
+opacity: 0.5;
+pointer-events: none;
+transform: none !important;
+}
+
+.disabled-button:hover {
+transform: none;
+}
+
+@keyframes spin {
+0% {
+transform: rotate(0deg);
+}
+100% {
+transform: rotate(360deg);
+}
+}
+
+#settings-button {
+width: 25px;
+height: 25px;
+cursor: pointer;
+transition: transform 0.3s;
+margin-left: 10px;
+animation: spin 5s linear infinite;
+animation-play-state: paused;
+}
+
+#settings-button:hover {
+animation-play-state: running;
+}

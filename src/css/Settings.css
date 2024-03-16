@@ -8,6 +8,10 @@ html, body {
 
 }
 
+#color-mode:focus {
+    outline: none;
+}
+
 .settings-container {
     display: flex;
     height: 100%;

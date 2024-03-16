@@ -17,7 +17,7 @@
   "author": "Mehdi Abdulhafiz",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^27.0.2",
+    "electron": "^27.3.6",
     "electron-packager": "^17.1.2",
     "electron-rebuild": "^3.2.9"
   },
