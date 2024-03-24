@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://i.imgur.com/7t2WxfC.png" height="148">
+  <img src="https://i.imgur.com/7t2WxfC.png" height="148">
   <h2 align="center">StealthPlane</h2>
   <p align="center">Cross-platform application for stealthy browsing in a floating window<p>
   <p align="center">
@@ -71,20 +71,20 @@ To run StealthPlane from the source code:
 
 > StealthPlane - Start Page
 
-![StealthPlane - Start Page](https://i.imgur.com/a/WbCEYTX.png)
+![StealthPlane - Start Page](https://i.imgur.com/qL6pYf4.png)
 
 > Opacity Demonstration
 
-![Opacity Demonstration - 100%](https://i.imgur.com/a/O1KqaMT.png)
-![Opacity Demonstration - 50%](https://i.imgur.com/a/uSYpQ4p.png)
+![Opacity Demonstration - 100%](https://i.imgur.com/OJg05UZ.png)
+![Opacity Demonstration - 50%](https://i.imgur.com/9tu3Ph9.png)
 
 > StealthPlane - Main Window
 
-![StealthPlane - Main Window](https://i.imgur.com/a/lU8pZAa.png)
+![StealthPlane - Main Window](https://i.imgur.com/P0Mu2BF.png)
 
 > Settings Page
 
-![Settings Page](https://i.imgur.com/a/SO2xzyO.png)
+![Settings Page](https://i.imgur.com/2R6Gukc.png)
 
 ## Future Plans
 * [ ] Migrate the app from Electron with HTML and JavaScript to Electron with Vite, React, and TypeScript to improve performance and reduce lag *_(In Progress)_*
