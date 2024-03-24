@@ -1,10 +1,15 @@
 {
-  "name": "floating_browser",
+  "name": "stealthplane",
   "version": "1.0.0",
   "description": "A floating browser built with Electron that stays on top of other windows.",
   "main": "src/js/main.js",
   "scripts": {
-    "package": "electron-packager . floating_browser --overwrite --platform=win32 --arch=ia32,x64 --prune=true --out=release-builds",
+    "package-win": "electron-packager . stealthplane --overwrite --platform=win32 --arch=ia32,x64 --prune=true --out=release-builds --icon=./src/assets/img/StealthPlane.ico",
+    "package-mac": "electron-packager . stealthplane --overwrite --platform=darwin --arch=x64 --icon=./src/assets/img/StealthPlane.icns --prune=true --out=release-builds --no-symlink",
+    "package-linux": "electron-packager . stealthplane --overwrite --platform=linux --arch=x64 --prune=true --out=release-builds --icon=./src/assets/img/StealthPlane512.png",
+    "package-linux-deb": "electron-installer-debian --src release-builds/stealthplane-linux-x64/ --arch amd64 --config debian.json",
+    "package-linux-appimage": "electron-builder --linux AppImage",
+    "package-linux-portable": "electron-packager . stealthplane --overwrite --platform=linux --arch=x64 --prune=true --out=release-builds --executable-name=stealthplanePortable --icon=./src/assets/img/StealthPlane512.png",
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,9 +20,10 @@
     "always-on-top"
   ],
   "author": "Mehdi Abdulhafiz",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "electron": "^27.3.6",
+    "electron-builder": "^24.13.3",
     "electron-packager": "^17.1.2",
     "electron-rebuild": "^3.2.9"
   },

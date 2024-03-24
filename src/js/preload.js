@@ -32,7 +32,11 @@ window.addEventListener('DOMContentLoaded', () => {
      document.addEventListener('mousedown', this.handleMouseDown.bind(this));
      document.addEventListener('mousemove', this.handleMouseMove.bind(this));
      document.addEventListener('mouseup', this.handleMouseUp.bind(this));
-
+     document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        ipcRenderer.send('cancel-snipping');
+      }
+    });
      document.getElementById('snip-button').addEventListener('click', this.initiateSnipping.bind(this));
    }
 

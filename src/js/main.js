@@ -53,8 +53,13 @@ function saveShortcuts(shortcuts) {
 
 // Window creation and management
 function createWindow() {
+   if (windowPosition.x === 0 && windowPosition.y === 0) {
+    const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+    windowPosition.x = Math.round((width - mainWindowSize.width) / 2);
+    windowPosition.y = Math.round((height - mainWindowSize.height) / 2);
+  }
   mainWindow = new BrowserWindow({
-    title: 'Floating Browser',
+    title: 'Stealth Plane',
     width: mainWindowSize.width,
     height: mainWindowSize.height,
     x: windowPosition.x,
@@ -112,7 +117,7 @@ function createTrayIcon() {
     }
   ]);
 
-  tray.setToolTip('Floating Browser');
+  tray.setToolTip('Stealth Plane');
   tray.setContextMenu(trayContextMenu);
 
   tray.on('click', () => {
@@ -182,10 +187,17 @@ class SnippingTool {
     });
 
     this.snipWindow.once('ready-to-show', () => {
+      this.snipWindow.webContents.executeJavaScript(`
+      document.getElementById("snipModal").style.display = "block";
+      setTimeout(() => {
+        document.getElementById("snipModal").style.display = "none";
+      }, 2000);
+    `);
       this.snipWindow.focus();
       this.snipWindow.maximize();
       this.snipWindow.setAlwaysOnTop(true, 'screen-saver', 1);
       this.snipWindow.setFullScreen(true);
+
     });
 
     this.snipWindow.loadFile(path.join(__dirname, '..', 'html', 'snip.html'));
@@ -210,6 +222,8 @@ class SnippingTool {
     if (this.snipWindow) {
       this.snipWindow.close();
       this.snipWindow = null;
+      this.fullScreenshot = null;
+
     }
   }
 
@@ -224,6 +238,12 @@ class SnippingTool {
 let snippingTool = new SnippingTool();
 
 // IPC event listeners
+ipcMain.on('cancel-snipping', () => {
+  if (snippingTool && snippingTool.snipWindow) {
+    snippingTool.closeSnipWindow();
+  }
+});
+
 const MIN_WIDTH = 500;
 const MIN_HEIGHT = 300;
 const MAX_WIDTH = 2560;
@@ -297,7 +317,7 @@ ipcMain.on('toggle-frame', () => {
   windowPosition = mainWindow.getPosition();
 
   const newWindow = new BrowserWindow({
-    title: 'Floating Browser',
+    title: 'Stealth Plane',
     width: width,
     height: height,
     x: windowPosition[0],
@@ -413,7 +433,7 @@ ipcMain.on('set-frame-disabled', (event, disabled) => {
   windowPosition = mainWindow.getPosition();
 
   const newWindow = new BrowserWindow({
-    title: 'Floating Browser',
+    title: 'Stealth Plane',
     width: width,
     height: height,
     x: windowPosition[0],
