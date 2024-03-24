@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://i.imgur.com/a/Z2UawWp.png" height="148">
+    <img src="https://i.imgur.com/7t2WxfC.png" height="148">
   <h2 align="center">StealthPlane</h2>
   <p align="center">Cross-platform application for stealthy browsing in a floating window<p>
   <p align="center">
