@@ -3,7 +3,7 @@
   <h2 align="center">StealthPlane</h2>
   <p align="center">Cross-platform application for stealthy browsing in a floating window<p>
   <p align="center">
-    <a href="https://github.com/mahdi991613487/StealthPlane/blob/master/LICENSE">
+    <a href="https://github.com/mahdi991613487/StealthPlane/blob/main/LICENSE.txt">
       <img src="https://img.shields.io/badge/License-MIT-yellow.svg" />
     </a>
     <a href="https://github.com/mahdi991613487/StealthPlane/releases">
@@ -85,22 +85,3 @@ To run StealthPlane from the source code:
 > Settings Page
 
 ![Settings Page](https://i.imgur.com/2R6Gukc.png)
-
-## Future Plans
-* [ ] Migrate the app from Electron with HTML and JavaScript to Electron with Vite, React, and TypeScript to improve performance and reduce lag *_(In Progress)_*
-* [ ] Additional privacy features, such as built-in VPN and ad-blocking
-* [ ] Support for browser extensions
-
-
-
-## Contributing
-If you'd like to contribute, please follow these steps:
-
-1. Fork the repository
-2. Create a new branch for your feature or bug fix
-3. Commit your changes and push the branch to your fork
-4. Submit a pull request detailing your changes
-
-## License
-
-StealthPlane is released under the MIT License. See [LICENSE](https://github.com/mahdi991613487/StealthPlane/blob/master/LICENSE) for more information.
