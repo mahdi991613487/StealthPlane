@@ -1,0 +1,30 @@
+#snipping-tool {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 9999;
+  }
+  
+  #snip-modal {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: transparent;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    pointer-events: none;
+  }
+  
+  #rect {
+    position: absolute;
+    border: 2px solid red;
+    pointer-events: none;
+    width: 0;
+    height: 0;
+    visibility: hidden;
+  }

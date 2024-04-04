@@ -1,0 +1,43 @@
+{
+  "name": "stealthplane",
+  "private": true,
+  "version": "1.1.0",
+  "scripts": {
+    "package-win": "electron-packager . stealthplane --overwrite --platform=win32 --arch=ia32,x64 --prune=true --out=release-builds --icon=./src/assets/StealthPlane.ico",
+    "package-mac": "electron-packager . stealthplane --overwrite --platform=darwin --arch=x64 --icon=./src/assets/StealthPlane.icns --prune=true --out=release-builds --no-symlink",
+    "package-linux": "electron-packager . stealthplane --overwrite --platform=linux --arch=x64 --prune=true --out=release-builds --icon=./src/assets/StealthPlane512.png",
+    "dev": "vite",
+    "build": "tsc && vite build && electron-builder",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "electron-context-menu": "^3.6.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "vite-tsconfig-paths": "^4.3.2"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.4.2",
+    "@testing-library/react": "^14.2.2",
+    "@testing-library/user-event": "^14.5.2",
+    "@types/jest": "^29.5.12",
+    "@types/react": "^18.2.64",
+    "@types/react-dom": "^18.2.21",
+    "@typescript-eslint/eslint-plugin": "^7.1.1",
+    "@typescript-eslint/parser": "^7.1.1",
+    "@vitejs/plugin-react": "^4.2.1",
+    "electron": "^29.1.5",
+    "electron-builder": "^24.13.3",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "jest": "^29.7.0",
+    "sass": "^1.72.0",
+    "typescript": "^5.2.2",
+    "vite": "^5.1.6",
+    "vite-plugin-electron": "^0.28.4",
+    "vite-plugin-electron-renderer": "^0.14.5"
+  },
+  "main": "dist-electron/main.js"
+}

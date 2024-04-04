@@ -1,0 +1,218 @@
+.dark-mode {
+   background-color: #1f1f1f;
+   color: #f1f1f1;
+ }
+ 
+ .dark-mode .sidebar {
+   background-color: #2b2b2b;
+ }
+ 
+ .dark-mode .tab-item:hover,
+ .dark-mode .tab-item.active {
+   background-color: #3c3c3c;
+ }
+ 
+ .dark-mode .shortcut-table th {
+   background-color: #3c3c3c;
+ }
+ 
+ .dark-mode .shortcut-table th,
+ .dark-mode .shortcut-table td {
+   border-color: #555;
+ }
+ 
+ .dark-mode .modal-content {
+   background-color: #2b2b2b;
+   color: #f1f1f1;
+ }
+ 
+ .light-mode {
+   background-color: #f4f4f4;
+   color: #000;
+ }
+ 
+ .light-mode .sidebar {
+   background-color: #f1f1f1;
+ }
+ 
+ .light-mode .tab-item:hover,
+ .light-mode .tab-item.active {
+   background-color: #ddd;
+ }
+ 
+ .light-mode .shortcut-table th {
+   background-color: #e0e0e0;
+ }
+ 
+ .light-mode .shortcut-table th,
+ .light-mode .shortcut-table td {
+   border-color: #ddd;
+ }
+ 
+ .light-mode .modal-content {
+   background-color: #fefefe;
+   color: #000;
+ }
+html, body {
+   height: 100vh;
+   margin: 0;
+   padding: 0;
+   overflow: hidden;
+   font-family: Arial, sans-serif;
+
+}
+
+#color-mode:focus {
+   outline: none;
+}
+
+.settings-container {
+   display: flex;
+   height: 100vh;
+   box-sizing: border-box;
+}
+
+.sidebar {
+   width: 200px;
+   background-color: #f1f1f1;
+   padding: 20px;
+   box-sizing: border-box;
+
+}
+
+.tab-list {
+   list-style: none;
+   padding: 0;
+   margin: 0;
+
+}
+
+.tab-item {
+   cursor: pointer;
+   padding: 10px;
+   transition: background-color 0.3s ease;
+}
+
+.tab-item:hover,
+.tab-item.active {
+   background-color: #ddd;
+}
+
+.content {
+   flex-grow: 1;
+   padding: 20px;
+   box-sizing: border-box;
+   
+   
+}
+
+.tab-content {
+   display: none;
+}
+
+.tab-content.active {
+   display: block;
+}
+
+.shortcut-table {
+   width: 100%;
+   border-collapse: collapse;
+   margin-bottom: 20px;
+}
+
+.shortcut-table th, .shortcut-table td {
+   border: 1px solid #ddd;
+   padding: 8px;
+   text-align: left;
+}
+
+.shortcut-table th {
+   background-color: #e0e0e0;
+}
+
+.edit-btn {
+   cursor: pointer;
+   color: #007bff;
+   text-decoration: underline;
+}
+
+.button-bar {
+   text-align: right;
+   position: absolute;
+   bottom: 0;
+   left: 0;
+   width: 100%;
+   padding: 20px;
+   box-sizing: border-box;
+}
+
+.button {
+   padding: 10px 20px;
+   color: #fff;
+   border: none;
+   border-radius: 5px;
+   cursor: pointer;
+   font-size: 1em;
+   transition: background-color 0.2s ease;
+   outline: none;
+   margin-left: 10px;
+}
+
+.save-button {
+   background-color: #4CAF50;
+}
+
+.save-button:hover {
+   background-color: #45a049;
+}
+
+.back-button {
+   background-color: #f44336;
+}
+
+.back-button:hover {
+   background-color: #d32f2f;
+}
+
+.modal {
+   display: none;
+   position: fixed;
+   z-index: 1;
+   left: 0;
+   top: 0;
+   width: 100%;
+   height: 100%;
+   overflow: auto;
+   background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+   background-color: #fefefe;
+   margin: 15% auto;
+   padding: 20px;
+   border: 1px solid #888;
+   width: 500px;
+   text-align: center;
+   border-radius: 5px;
+   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.appearance-settings {
+   margin-bottom: 20px;
+   
+}
+
+.setting {
+   display: flex;
+   align-items: center;
+   margin-bottom: 10px;
+}
+
+.setting label {
+   margin-right: 10px;
+}
+
+.setting input[type="checkbox"],
+.setting select {
+   margin-left: auto;
+}
